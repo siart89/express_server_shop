@@ -6,8 +6,6 @@ const useragent = require('express-useragent');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-// const QueruResultError = pgp.errors.QueryResultError;
-
 // for parse json's request
 
 const bodyParser = require('body-parser');
@@ -46,9 +44,10 @@ const chekUser = (req, res, next) => {
       console.log(err.message);
     });
 };
-
+// use information of client os / browser ..etc
 app.use(useragent.express());
 
+// New User Registration
 app.post('/users/signin', jsonParser, chekUser, (req, res) => {
   const user = {
     name: req.body.name,
@@ -64,13 +63,7 @@ app.post('/users/signin', jsonParser, chekUser, (req, res) => {
   db.none(`INSERT INTO users (name, mail, password, agent, phone, os)
     VALUES ($1, $2, $3, $4, $5, $6)`, [user.name, user.mail, user.password, user.agent, user.phone, user.os])
     .then(() => {
-      const token = jwt.sign({
-        name: user.name,
-        mail: user.mail,
-        password: user.password,
-      }, secret, { algorithm: 'HS256' });
-
-      res.json({ message: 'Успешно зарегистрирован', token });
+      res.json({ message: 'Успешно зарегистрирован' });
     })
     .catch(() => {
       res.sendStatus(403);

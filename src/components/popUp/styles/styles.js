@@ -27,7 +27,7 @@ const FormBoxTop = styled.div`
 
 const LinksLabel = styled.label`
   text-decoration:none;
-  color:${(props) => (props.reg ? '#42CEE2' : '#000')};
+  color:${(props) => (props.reg ? '#000' : '#42CEE2')};
   cursor:pointer;
 `;
 

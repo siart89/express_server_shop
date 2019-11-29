@@ -8,7 +8,7 @@ import {
   FormTitle,
   FormBtn,
 } from './styles/styles';
-import regIn from '../../store/actions/regIn';
+import modeLog from '../../store/actions/modeLog';
 
 const SignIn = () => {
   const [name, setName] = useState('');
@@ -44,10 +44,8 @@ const SignIn = () => {
       });
       const result = await resp.json();
       if (result.message) {
+        dispatch(modeLog());
         setMessage(result.message);
-        if (result.token) {
-          dispatch(regIn(result.token));
-        }
       } else {
         setMessage('Сбой, повторите попытку');
       }

@@ -1,3 +1,3 @@
 export default () => ({
-  type: 'EXIT',
+  type: 'MODE_REG',
 });

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import CurrentUser from './CurrentUser';
 import PopUpWindow from './PopUpWindow';
-import IsRegistred from './IsRegistred';
+import Mode from './Mode';
 
 export default combineReducers({
   currentUser: CurrentUser,
   popUp: PopUpWindow,
-  isReg: IsRegistred,
+  mode: Mode,
 });

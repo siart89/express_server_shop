@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { close } from 'react-icons-kit/fa/close';
 import {
@@ -12,49 +12,51 @@ import {
 import SignIn from './SignIn';
 import togglePopUp from '../../store/actions/togglePopUp';
 import LogIn from './LogIn';
+import modeLog from '../../store/actions/modeLog';
+import modeReg from '../../store/actions/modeReg';
 
 const PopUp = () => {
   const dispatch = useDispatch();
-  const [reg, setReg] = useState(true);
-  const isReg = useSelector((state) => state.isReg);
+  const mode = useSelector((state) => state.mode);
 
-  useEffect(() => {
-    setReg(!isReg);
-  }, [isReg]);
+  const handleOnCLose = () => {
+    dispatch(togglePopUp());
+    dispatch(modeLog());
+  };
 
   return (
     <PopUpWrapper>
       <FormBox>
         <FormBoxTop>
-          <LinksLabel reg={reg} style={{ paddingRight: '4px' }}>
+          <LinksLabel reg={mode} style={{ paddingRight: '4px' }}>
             <input
               type="radio"
               name="links"
               style={{ display: 'none' }}
-              onChange={(e) => setReg(!e.target.checked)}
+              onChange={() => dispatch(modeLog())}
               value="log"
             />
             Войти
           </LinksLabel>
           /
-          <LinksLabel style={{ paddingLeft: '4px' }} reg={!reg}>
+          <LinksLabel style={{ paddingLeft: '4px' }} reg={!mode}>
             <input
               type="radio"
               name="links"
               style={{ display: 'none' }}
               value="reg"
-              onChange={(e) => setReg(e.target.checked)}
+              onChange={() => dispatch(modeReg())}
             />
             Регистрация
           </LinksLabel>
           <CloseBtn
             type="button"
-            onClick={() => dispatch(togglePopUp())}
+            onClick={handleOnCLose}
           >
             <CloseIcon icon={close} size={20} />
           </CloseBtn>
         </FormBoxTop>
-        {reg ? <SignIn /> : <LogIn />}
+        {mode ? <LogIn /> : <SignIn />}
       </FormBox>
     </PopUpWrapper>
   );
