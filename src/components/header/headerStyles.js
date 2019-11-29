@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const GlobalStyles = createGlobalStyle`
@@ -6,6 +6,9 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     line-height: 1.15;
     background:#fff;
+    ${(props) => props.isShow && css`
+    overflow-y:hidden;
+    `}
   }
   *{
     padding:0;
