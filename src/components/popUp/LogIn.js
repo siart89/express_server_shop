@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Form,
   Div,
@@ -7,19 +8,50 @@ import {
   FormTitle,
   FormBtn,
 } from './styles/styles';
+import logIn from '../../store/actions/logIn';
+import togglePopUp from '../../store/actions/togglePopUp';
 
 const LogIn = () => {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
-  const [message] = useState('');
+  const [message, setMessage] = useState('');
 
+  const dispatch = useDispatch();
+
+  const handleLogInOnSubm = async (e) => {
+    e.preventDefault();
+    if (mail && password) {
+      const userData = {
+        mail,
+        password,
+      };
+
+      const res = await fetch('/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify(userData),
+      });
+      const result = await res.json();
+
+      if (result.token) {
+        // set Token and userName into local storage
+        dispatch(logIn(result.token, result.name, result.refreshToken));
+        // if result ok hide Pop-Up window with REG- LOG mode
+        dispatch(togglePopUp());
+      } else {
+        setMessage(result.message);
+      }
+    }
+  };
   return (
     <>
       <FormTitle>
         Войти
       </FormTitle>
       {message && <FormTitle>{message}</FormTitle>}
-      <Form>
+      <Form onSubmit={handleLogInOnSubm}>
         <Div>
           <Label>
             <Input
@@ -42,7 +74,7 @@ const LogIn = () => {
             />
           </Label>
         </Div>
-        <FormBtn>
+        <FormBtn type="submit">
           Войти
         </FormBtn>
       </Form>

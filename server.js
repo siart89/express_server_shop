@@ -5,6 +5,7 @@ const pgp = require('pg-promise')({
 const useragent = require('express-useragent');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const uniqid = require('uniqid');
 
 // for parse json's request
 
@@ -54,18 +55,107 @@ app.post('/users/signin', jsonParser, chekUser, (req, res) => {
     mail: req.body.mail,
     phone: req.body.phone,
     password: req.body.password,
-    agent: req.headers['user-agent'],
-    os: req.useragent.os,
   };
 
-  const secret = fs.readFileSync('./secret/secret.key', 'utf8');
-
-  db.none(`INSERT INTO users (name, mail, password, agent, phone, os)
-    VALUES ($1, $2, $3, $4, $5, $6)`, [user.name, user.mail, user.password, user.agent, user.phone, user.os])
+  db.none(`INSERT INTO users (name, mail, password, phone)
+    VALUES ($1, $2, $3, $4)`, [user.name, user.mail, user.password, user.phone])
     .then(() => {
       res.json({ message: 'Успешно зарегистрирован' });
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err);
       res.sendStatus(403);
     });
+});
+
+// User Auth
+const secretKey = fs.readFileSync('./secret/secret.key', 'utf8');
+app.set('trust proxy', true);
+
+
+const makeNewSession = (req, data, next) => {
+  const createdTime = Date.now();
+  const expiredTime = new Date(createdTime + (24 * 60 * 60 * 1000));
+  const refreshToken = uniqid();
+  // clear user session , expected 1 user session for each
+  db.none('DELETE FROM sessions WHERE user_id = $1', [data.id])
+    .then(() => {
+      // Create user session
+      db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [data.id, req.ip, req.useragent.os, req.useragent.source,
+          refreshToken, expiredTime, new Date(createdTime), data.name])
+        .then(() => {
+          jwt.sign({ id: data.id, ip: req.ip, os: req.useragent.os },
+            secretKey,
+            { algorithm: 'HS256', expiresIn: '30s' }, (err, token) => {
+              req.userInfo = { token, name: data.name, refreshToken };
+              next();
+            });
+        });
+    });
+};
+
+const authenticationUser = (req, res, next) => {
+  db.one('SELECT * FROM users WHERE mail = $1', [req.body.mail])
+    .then((data) => {
+      makeNewSession(req, data, next);
+    })
+    .catch(() => {
+      res.json({ message: 'Пользователь с указанной почтой не найден' });
+    });
+};
+
+app.post('/user/login', jsonParser, authenticationUser, (req, res) => {
+  res.json(req.userInfo);
+});
+
+// Authorization
+const authorizationUser = (req, res, next) => {
+  if (typeof req.headers.authorization !== 'undefined') {
+    const token = req.headers.authorization.split(' ')[1];
+    jwt.verify(token, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
+      if (err) {
+        console.log(err.name);
+        if (err.name === 'TokenExpiredError') {
+          res.json({ status: 'timeOut' });
+        } else {
+          res.status(500).json({ status: false });
+          throw new Error(' User has not auth');
+        }
+      } else {
+        console.log(encoded);
+        next();
+      }
+    });
+  } else {
+    res.sendStatus(500);
+  }
+};
+
+app.use('/secret', authorizationUser, (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Refresh token
+const useRefreshToken = (req, res, next) => {
+  if (typeof req.headers.authorization !== 'undefined') {
+    const refToken = req.headers.authorization.split(' ')[1];
+    db.one('SELECT * FROM sessions WHERE refresh_token = $1',
+      [refToken])
+      .then((data) => {
+        if (data.expired_at <= (Math.floor(Date.now() / 1000))) {
+          console.log('err');
+          throw new Error('Refresh token was expire');
+        }
+        makeNewSession(req, data, next);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+};
+
+app.get('/refresh', useRefreshToken, (req, res) => {
+  res.json({ token: req.userInfo.token, refreshToken: req.userInfo.refreshToken });
 });

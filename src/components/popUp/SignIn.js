@@ -45,7 +45,6 @@ const SignIn = () => {
       const result = await resp.json();
       if (result.message) {
         dispatch(modeLog());
-        setMessage(result.message);
       } else {
         setMessage('Сбой, повторите попытку');
       }
