@@ -1,9 +1,9 @@
 
 
 
-##DB structure 
+## DB structure 
 
-##users : {
+## users : {
   
   id SERIAL PRIMARY KEY
   
@@ -20,7 +20,7 @@
   phone text
 }
 
-##sessions : {
+## sessions : {
   
   id SERIAL PRIMARY KEY
   
