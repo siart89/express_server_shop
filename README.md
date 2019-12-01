@@ -1,9 +1,9 @@
 
-## Available Scripts
 
-DB structure 
 
-users : {
+##DB structure 
+
+##users : {
   
   id SERIAL PRIMARY KEY
   
@@ -20,7 +20,7 @@ users : {
   phone text
 }
 
-sessions : {
+##sessions : {
   
   id SERIAL PRIMARY KEY
   
