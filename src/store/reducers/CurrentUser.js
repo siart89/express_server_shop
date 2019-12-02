@@ -1,21 +1,21 @@
-const initState = JSON.parse(localStorage.getItem('userName')) || null;
+const initState = {
+  name: JSON.parse(localStorage.getItem('userName')) || null,
+  isLogIn: JSON.parse(localStorage.getItem('token')) && true,
+};
 
 export default (state = initState, action) => {
   switch (action.type) {
   case 'LOG_IN': {
-    const { name, token, refreshToken } = action.payload;
+    const { name } = action.payload;
     const upName = `${name[0].toUpperCase()}${name.slice(1)}`;
-
-    localStorage.setItem('token', JSON.stringify(token));
-    localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
     localStorage.setItem('userName', JSON.stringify(upName));
-    return upName;
+    return { name: upName, isLogIn: true };
   }
   case 'LOG_OUT':
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userName');
-    return null;
+    return { name: null, isLogIn: false };
   default:
     return state;
   }

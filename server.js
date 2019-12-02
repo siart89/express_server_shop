@@ -83,8 +83,8 @@ const makeNewSession = (req, data, next) => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [data.id, req.ip, req.useragent.os, req.useragent.source,
-          refreshToken, expiredTime, new Date(createdTime), data.name])
+      [data.id, req.ip, req.useragent.os, req.useragent.source,
+        refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
           jwt.sign({ id: data.id, ip: req.ip, os: req.useragent.os },
             secretKey,
@@ -97,12 +97,12 @@ const makeNewSession = (req, data, next) => {
 };
 
 const authenticationUser = (req, res, next) => {
-  db.one('SELECT * FROM users WHERE mail = $1', [req.body.mail])
+  db.one('SELECT * FROM users WHERE mail = $1 AND password = $2', [req.body.mail, req.body.password])
     .then((data) => {
       makeNewSession(req, data, next);
     })
     .catch(() => {
-      res.json({ message: 'Пользователь с указанной почтой не найден' });
+      res.sendStatus(403);
     });
 };
 
@@ -116,13 +116,8 @@ const authorizationUser = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     jwt.verify(token, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
       if (err) {
-        console.log(err.name);
-        if (err.name === 'TokenExpiredError') {
-          res.json({ status: 'timeOut' });
-        } else {
-          res.status(500).json({ status: false });
-          throw new Error(' User has not auth');
-        }
+        res.sendStatus(403);
+        throw new Error(' User has not auth');
       } else {
         console.log(encoded);
         next();
@@ -152,6 +147,7 @@ const useRefreshToken = (req, res, next) => {
       })
       .catch((err) => {
         console.log(err);
+        res.sendStatus(403);
       });
   }
 };

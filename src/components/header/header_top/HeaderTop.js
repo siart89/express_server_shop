@@ -14,30 +14,6 @@ const HeaderTop = () => {
   const dispatch = useDispatch();
   const activeUser = useSelector((state) => state.currentUser);
 
-  const handleVerify = async () => {
-    const resp = await fetch('/secret', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
-      },
-    });
-    const result = await resp.json();
-    console.log(result);
-    if (result.status === 'timeOut') {
-      const refreshResp = await fetch('/refresh', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('refreshToken'))}`,
-        },
-      });
-      const refreshResult = await refreshResp.json();
-      localStorage.setItem('token', JSON.stringify(refreshResult.token));
-      localStorage.setItem('refreshToken', JSON.stringify(refreshResult.refreshToken));
-    }
-  };
-
   return (
     <HeaderTopWrapper>
       <HeaderTopInner>
@@ -54,10 +30,12 @@ const HeaderTop = () => {
           <HeaderTopLinks to="/">
             Наши магазины
           </HeaderTopLinks>
-          {activeUser
+          {activeUser.isLogIn
             ? (
-              <HeaderTopText onClick={handleVerify}>
-                {activeUser}
+              <HeaderTopText>
+                <HeaderTopLinks to="/profile">
+                  {activeUser.name}
+                </HeaderTopLinks>
               </HeaderTopText>
             )
             : (

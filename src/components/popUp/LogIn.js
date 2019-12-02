@@ -33,15 +33,19 @@ const LogIn = () => {
         },
         body: JSON.stringify(userData),
       });
-      const result = await res.json();
 
-      if (result.token) {
+      if (res.ok) {
+        const result = await res.json();
         // set Token and userName into local storage
-        dispatch(logIn(result.token, result.name, result.refreshToken));
+        dispatch(logIn(result.name));
+
+        localStorage.setItem('token', JSON.stringify(result.token));
+        localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+
         // if result ok hide Pop-Up window with REG- LOG mode
         dispatch(togglePopUp());
       } else {
-        setMessage(result.message);
+        setMessage('Почта или пароль указаны неверно');
       }
     }
   };

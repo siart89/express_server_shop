@@ -1,9 +1,6 @@
-export default (token, name, refreshToken) => ({
+export default (name) => ({
   type: 'LOG_IN',
-  token,
   payload: {
-    token,
     name,
-    refreshToken,
   },
 });
