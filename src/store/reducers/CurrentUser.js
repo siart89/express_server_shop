@@ -1,6 +1,6 @@
 const initState = {
-  name: JSON.parse(localStorage.getItem('userName')) || null,
-  isLogIn: JSON.parse(localStorage.getItem('token')) && true,
+  name: JSON.parse(localStorage.getItem('userName')) || false,
+  isLogIn: (JSON.parse(localStorage.getItem('token')) && true) || false,
 };
 
 export default (state = initState, action) => {
@@ -15,7 +15,7 @@ export default (state = initState, action) => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userName');
-    return { name: null, isLogIn: false };
+    return { name: false, isLogIn: false };
   default:
     return state;
   }
