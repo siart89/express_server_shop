@@ -6,9 +6,6 @@ const useragent = require('express-useragent');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const uniqid = require('uniqid');
-
-// for parse json's request
-
 const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
@@ -21,12 +18,17 @@ const cn = {
   user: 'postgres',
   password: 'drevnieslezi2012',
 };
-
 const db = pgp(cn);
+
 
 // create server
 const app = express();
+app.set('trust proxy', true);
+
 const port = (process.env.PORT || 8080);
+
+// use information of client os / browser ..etc
+app.use(useragent.express());
 
 app.listen(port, (err) => {
   if (err) {
@@ -35,6 +37,8 @@ app.listen(port, (err) => {
     console.log('Server is started');
   }
 });
+
+// -------------REGISTRATION--------------
 
 // check for user with same mail
 const chekUser = (req, res, next) => {
@@ -45,8 +49,6 @@ const chekUser = (req, res, next) => {
       console.log(err.message);
     });
 };
-// use information of client os / browser ..etc
-app.use(useragent.express());
 
 // New User Registration
 app.post('/users/signin', jsonParser, chekUser, (req, res) => {
@@ -68,10 +70,11 @@ app.post('/users/signin', jsonParser, chekUser, (req, res) => {
     });
 });
 
-// User Auth
-const secretKey = fs.readFileSync('./secret/secret.key', 'utf8');
-app.set('trust proxy', true);
 
+// -------------------AUTHETICATION-----------------
+
+// User Auth
+const secretKey = fs.readFileSync('./server/secret/secret.key', 'utf8');
 
 const makeNewSession = (req, data, next) => {
   const createdTime = Date.now();
@@ -110,7 +113,9 @@ app.post('/user/login', jsonParser, authenticationUser, (req, res) => {
   res.json(req.userInfo);
 });
 
-// Authorization
+
+// -----------------AUTHORIZATION--------------------
+
 const authorizationUser = (req, res, next) => {
   if (typeof req.headers.authorization !== 'undefined') {
     const token = req.headers.authorization.split(' ')[1];
@@ -132,7 +137,9 @@ app.use('/secret', authorizationUser, (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Refresh token
+
+// --------------------REFRESH TOKEN ------------------
+
 const useRefreshToken = (req, res, next) => {
   if (typeof req.headers.authorization !== 'undefined') {
     const refToken = req.headers.authorization.split(' ')[1];
@@ -145,8 +152,7 @@ const useRefreshToken = (req, res, next) => {
         }
         makeNewSession(req, data, next);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         res.sendStatus(403);
       });
   }
