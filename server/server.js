@@ -91,7 +91,7 @@ const makeNewSession = (req, data, next) => {
         .then(() => {
           jwt.sign({ id: data.id, ip: req.ip, os: req.useragent.os },
             secretKey,
-            { algorithm: 'HS256', expiresIn: '30s' }, (err, token) => {
+            { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
               req.userInfo = { token, name: data.name, refreshToken };
               next();
             });
