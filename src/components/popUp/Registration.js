@@ -10,7 +10,7 @@ import {
 } from './styles/styles';
 import modeLog from '../../store/actions/modeLog';
 
-const SignIn = () => {
+const Registration = () => {
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [phone, setPhone] = useState('');
@@ -124,4 +124,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Registration;

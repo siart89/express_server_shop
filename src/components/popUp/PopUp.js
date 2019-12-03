@@ -9,7 +9,7 @@ import {
   CloseBtn,
   CloseIcon,
 } from './styles/styles';
-import SignIn from './SignIn';
+import Registration from './Registration';
 import togglePopUp from '../../store/actions/togglePopUp';
 import LogIn from './LogIn';
 import modeLog from '../../store/actions/modeLog';
@@ -56,7 +56,7 @@ const PopUp = () => {
             <CloseIcon icon={close} size={20} />
           </CloseBtn>
         </FormBoxTop>
-        {mode ? <LogIn /> : <SignIn />}
+        {mode ? <LogIn /> : <Registration />}
       </FormBox>
     </PopUpWrapper>
   );
