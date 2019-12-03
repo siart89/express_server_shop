@@ -7,6 +7,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const uniqid = require('uniqid');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 const jsonParser = bodyParser.json();
 
@@ -76,20 +77,24 @@ app.post('/users/signin', jsonParser, chekUser, (req, res) => {
 // User Auth
 const secretKey = fs.readFileSync('./server/secret/secret.key', 'utf8');
 
-const makeNewSession = (req, data, next) => {
+const makeNewSession = (req, data, next, id) => {
   const createdTime = Date.now();
   const expiredTime = new Date(createdTime + (24 * 60 * 60 * 1000));
   const refreshToken = uniqid();
   // clear user session , expected 1 user session for each
-  db.none('DELETE FROM sessions WHERE user_id = $1', [data.id])
+  db.none('DELETE FROM sessions WHERE user_id = $1', [id])
     .then(() => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [data.id, req.ip, req.useragent.os, req.useragent.source,
-        refreshToken, expiredTime, new Date(createdTime), data.name])
+        [id, req.ip, req.useragent.os, req.useragent.source,
+          refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
-          jwt.sign({ id: data.id, ip: req.ip, os: req.useragent.os },
+          jwt.sign({
+            id,
+            ip: req.ip,
+            os: req.useragent.os,
+          },
             secretKey,
             { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
               req.userInfo = { token, name: data.name, refreshToken };
@@ -102,7 +107,7 @@ const makeNewSession = (req, data, next) => {
 const authenticationUser = (req, res, next) => {
   db.one('SELECT * FROM users WHERE mail = $1 AND password = $2', [req.body.mail, req.body.password])
     .then((data) => {
-      makeNewSession(req, data, next);
+      makeNewSession(req, data, next, data.id);
     })
     .catch(() => {
       res.sendStatus(403);
@@ -125,6 +130,7 @@ const authorizationUser = (req, res, next) => {
         throw new Error(' User has not auth');
       } else {
         console.log(encoded);
+        req.id = encoded.id;
         next();
       }
     });
@@ -134,7 +140,18 @@ const authorizationUser = (req, res, next) => {
 };
 
 app.use('/secret', authorizationUser, (req, res) => {
-  res.json({ status: 'ok' });
+  db.one('SELECT * FROM users WHERE id = $1', [req.id])
+    .then((data) => {
+      res.status(200).json({
+        name: data.name,
+        mail: data.mail,
+        avatar: data.avatar,
+        phone: data.phone,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 
@@ -150,7 +167,7 @@ const useRefreshToken = (req, res, next) => {
           console.log('err');
           throw new Error('Refresh token was expire');
         }
-        makeNewSession(req, data, next);
+        makeNewSession(req, data, next, data.user_id);
       })
       .catch(() => {
         res.sendStatus(403);
@@ -160,4 +177,24 @@ const useRefreshToken = (req, res, next) => {
 
 app.get('/refresh', useRefreshToken, (req, res) => {
   res.json({ token: req.userInfo.token, refreshToken: req.userInfo.refreshToken });
+});
+
+
+// Add Avatar picture
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './server/my-uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uniqid()}.${Date.now()}.${file.originalname}`);
+  },
+});
+
+
+const upload = multer({ storage });
+
+app.post('/profile/avatar', upload.single('avatar'), (req, res, next) => {
+  console.log(req.file);
+  next();
 });
