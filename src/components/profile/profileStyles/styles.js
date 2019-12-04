@@ -50,45 +50,45 @@ const LogOutButton = styled.div`
     cursor: pointer;
    
 `;
-const InputLabel = styled.label.attrs((props) => ({
-  color: props.isOnIn ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.2)',
-}))`
+const InputLabel = styled.label`
   cursor: pointer;
   display:block;
-  width:25px;
-  height:25px;
+  min-width:100%;
+  min-height:100%;
   position: relative;
   border-radius:100%;
-&::before, &::after{
-  content:"";
-  display:block;
-  position:absolute;
-  width: 2px;
-  height:22px;
-  background-color: ${(props) => props.color};
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  cursor: pointer;
-  transition: background 0.3s ease-in;
-}
-&::after{
-  width: 22px;
-  height:2px;
-}
+  font-size: 34px;
+  text-align:center;
 `;
 
 const Tip = styled.span`
   position:absolute;
   font-size: 10px;
-  color:#e6d9b5;
-  bottom: -20px;
-  right:-20px;
+  color:#000;
+  padding:3px 5px; 
+  border-radius:5px;
+  bottom: -30px;
+  right:-140px;
+  background:#fff;
 `;
 
 const AddInp = styled.input`
   display:none;
 `;
+
+const SubmitBtn = styled.button`
+  border-radius: 100%;
+  width:20px;
+  height:20px;
+  border:none;
+  background:#fff;
+  outline:none;
+  position:absolute;
+  bottom: -30px;
+  right: -15px;
+  cursor:pointer;
+`;
+
 export {
   ProfileWrapper,
   InfoWrapper,
@@ -98,4 +98,5 @@ export {
   AddInp,
   InputLabel,
   Tip,
+  SubmitBtn,
 };

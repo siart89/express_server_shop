@@ -37,7 +37,6 @@ const MainProfile = () => {
         }
       } else {
         const result = await resp.json();
-        console.log(result);
         dispatch(authOk(result));
       }
     };

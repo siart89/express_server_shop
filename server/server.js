@@ -45,9 +45,8 @@ app.listen(port, (err) => {
 const chekUser = (req, res, next) => {
   db.none('SELECT mail FROM users WHERE mail = $1', [req.body.mail])
     .then(() => next())
-    .catch((err) => {
+    .catch(() => {
       res.json({ message: 'Пользователь с такой почтой уже зарегистрирован' });
-      console.log(err.message);
     });
 };
 
@@ -65,8 +64,7 @@ app.post('/users/signin', jsonParser, chekUser, (req, res) => {
     .then(() => {
       res.json({ message: 'Успешно зарегистрирован' });
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
       res.sendStatus(403);
     });
 });
@@ -87,19 +85,19 @@ const makeNewSession = (req, data, next, id) => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [id, req.ip, req.useragent.os, req.useragent.source,
-          refreshToken, expiredTime, new Date(createdTime), data.name])
+      [id, req.ip, req.useragent.os, req.useragent.source,
+        refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
           jwt.sign({
             id,
             ip: req.ip,
             os: req.useragent.os,
           },
-            secretKey,
-            { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
-              req.userInfo = { token, name: data.name, refreshToken };
-              next();
-            });
+          secretKey,
+          { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
+            req.userInfo = { token, name: data.name, refreshToken };
+            next();
+          });
         });
     });
 };
@@ -129,7 +127,6 @@ const authorizationUser = (req, res, next) => {
         res.sendStatus(403);
         throw new Error(' User has not auth');
       } else {
-        console.log(encoded);
         req.id = encoded.id;
         next();
       }
@@ -164,7 +161,6 @@ const useRefreshToken = (req, res, next) => {
       [refToken])
       .then((data) => {
         if (data.expired_at <= (Math.floor(Date.now() / 1000))) {
-          console.log('err');
           throw new Error('Refresh token was expire');
         }
         makeNewSession(req, data, next, data.user_id);
@@ -181,20 +177,34 @@ app.get('/refresh', useRefreshToken, (req, res) => {
 
 
 // Add Avatar picture
+app.use(express.static('server/uploads'));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './server/my-uploads/');
+    cb(null, './server/uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, `${uniqid()}.${Date.now()}.${file.originalname}`);
+    cb(null, `${uniqid()}${Date.now()}${file.originalname}`);
   },
 });
 
-
 const upload = multer({ storage });
 
-app.post('/profile/avatar', upload.single('avatar'), (req, res, next) => {
-  console.log(req.file);
-  next();
+// Set avatar path to db
+const setUrl = (req, res, next) => {
+  db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [req.file.filename, req.id])
+    .then(() => {
+      next();
+    })
+    .catch(() => {
+      res.sendStatus(403);
+    });
+};
+
+app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, (req, res) => {
+  res.status(200).json({ url: req.file.filename });
+});
+
+app.get('/profile', (req, res) => {
+  res.sendStatus(200);
 });
