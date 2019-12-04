@@ -6,7 +6,8 @@ const PopUpWrapper = styled.div`
     min-height: 100%;
     height:100%;
     background: rgba(0, 0, 0, 0.2);
-    position: absolute;
+    position: fixed;
+    top:0;
     z-index:10;
 `;
 

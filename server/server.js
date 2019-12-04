@@ -192,7 +192,9 @@ const upload = multer({ storage });
 
 // Set avatar path to db
 const setUrl = (req, res, next) => {
-  db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [req.file.filename, req.id])
+  // path for local server
+  const path = `http://localhost:3000/${req.file.filename}`;
+  db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [path, req.id])
     .then(() => {
       next();
     })

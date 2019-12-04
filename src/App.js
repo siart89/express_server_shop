@@ -8,8 +8,9 @@ import {
 import { GlobalStyles } from './components/header/headerStyles';
 import MainPage from './components/pages/MainPage';
 import PopUp from './components/popUp/PopUp';
-import MainProfile from './components/profile/MainProfile';
+import MainProfile from './components/pages/MainProfile';
 import ProtectedRouter from './components/actions/protectedRouter';
+import Header from './components/header/Header';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     <Router>
       <GlobalStyles isShow={popUp} />
       <div className="App">
+        <Header />
         {popUp && <PopUp />}
         <Switch>
           <Route path="/" exact component={MainPage} />

@@ -1,8 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ProfileWrapper } from './profileStyles/styles';
-import ProfileInfo from './profileElements/ProfileInfo';
+import { Switch, Route } from 'react-router-dom';
+import {
+  ProfileWrapper,
+  ProfLinks,
+  ProfContentWrapper,
+  LinksWrapper,
+  ProfContent,
+} from '../profile/profileStyles/styles';
+import ProfileInfo from '../profile/profileElements/ProfileInfo';
 import authOk from '../../store/actions/authOk';
+import MyBooks from '../profile/profileElements/MyBooks';
 
 const MainProfile = () => {
   const dispatch = useDispatch();
@@ -46,10 +54,21 @@ const MainProfile = () => {
     isAuth ? (
       <ProfileWrapper>
         <ProfileInfo />
+        <ProfContentWrapper>
+          <LinksWrapper>
+            <ProfLinks to="/profile/mybooks">Мои книги</ProfLinks>
+            <ProfLinks to="/profile/mybooks">Прочее</ProfLinks>
+          </LinksWrapper>
+          <ProfContent>
+            <Switch>
+              <Route path="/profile/mybooks" component={MyBooks} />
+            </Switch>
+          </ProfContent>
+        </ProfContentWrapper>
       </ProfileWrapper>
     ) : (
       <h1 style={{ textAlign: 'center' }}>
-          Upps... something happend
+          Loading...
       </h1>
     )
   );

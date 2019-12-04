@@ -1,29 +1,34 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const ProfileWrapper = styled.section`
   display:grid;
-  margin: 0 auto 49px;
+  margin: 50px auto 49px;
   width: 100%;
   max-width: 1160px;
-  grid-row-gap: 40px;
-  grid-auto-rows: 70px 1fr;
+  grid-column-gap: 70px;
+  grid-template-columns: 180px 1fr;
 `;
-
+// USER INFO STYLES
 const InfoWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction:column;
   background: #262323;
   align-items:center;
-
+  justify-content:center;
+  border-radius: 4px;
+  align-self: self-start;
+  box-shadow: 0 0 6px #6e6e6e; 
 `;
 
 const AvatarBox = styled.div`
   border-radius: 100%;
   border: 1px solid #000;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   background: #fff;
-  margin-left: 25px;
+  margin:25px 0;
   background-image:url(${(props) => props.url});
   background-size: cover;
   background-position: center center;
@@ -35,60 +40,58 @@ const AvatarBox = styled.div`
 const Title = styled.span`
     font-size: 14px;
     line-height: 25px;
+    padding-bottom: 10px;
     font-weight: bold;
     color: #A0A4A5;
-    padding-left: 25px;
 `;
 
 const LogOutButton = styled.div`
     font-size: 14px;
     line-height: 25px;
     font-weight: bold;
+    margin-bottom: 15px;
     color: #42CEE2;
-    margin-left: auto;
-    margin-right: 25px;
     cursor: pointer;
    
 `;
 const InputLabel = styled.label`
   cursor: pointer;
   display:block;
+  display:flex;
+  align-items:center;
   min-width:100%;
   min-height:100%;
+  justify-content:center;
   position: relative;
   border-radius:100%;
   font-size: 34px;
-  text-align:center;
-`;
-
-const Tip = styled.span`
-  position:absolute;
-  font-size: 10px;
-  color:#000;
-  padding:3px 5px; 
-  border-radius:5px;
-  bottom: -30px;
-  right:-140px;
-  background:#fff;
 `;
 
 const AddInp = styled.input`
   display:none;
 `;
 
-const SubmitBtn = styled.button`
-  border-radius: 100%;
-  width:20px;
-  height:20px;
-  border:none;
-  background:#fff;
-  outline:none;
-  position:absolute;
-  bottom: -30px;
-  right: -15px;
-  cursor:pointer;
+// PROFILE CONTENT STYLES
+const ProfContentWrapper = styled.div`
+  display: flex;
+  flex-direction:column;
+`;
+const LinksWrapper = styled.div`
+  display:flex;
+`;
+const ProfLinks = styled(Link)`
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-right: 78px;
+  color: #A0A4A5;
 `;
 
+const ProfContent = styled.div`
+  margin-top:20px;
+  display:grid;
+`;
 export {
   ProfileWrapper,
   InfoWrapper,
@@ -97,6 +100,8 @@ export {
   LogOutButton,
   AddInp,
   InputLabel,
-  Tip,
-  SubmitBtn,
+  ProfLinks,
+  ProfContentWrapper,
+  LinksWrapper,
+  ProfContent,
 };
