@@ -1,20 +1,19 @@
-// const express = require('express');
 import express from 'express';
-
-const pgp = require('pg-promise')({
-  promiseLib: Promise,
-});
-const useragent = require('express-useragent');
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
-const uniqid = require('uniqid');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const path = require('path');
+import useragent from 'express-useragent';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import uniqid from 'uniqid';
+import bodyParser from 'body-parser';
+import multer from 'multer';
+import path from 'path';
 
 const jsonParser = bodyParser.json();
 
 // set options for database
+const pgp = require('pg-promise')({
+  promiseLib: Promise,
+});
+
 const cn = {
   host: 'localhost',
   port: 5432,
@@ -31,9 +30,6 @@ app.set('trust proxy', true);
 
 const port = (process.env.PORT || 8080);
 
-// use information of client os / browser ..etc
-app.use(useragent.express());
-
 app.listen(port, (err) => {
   if (err) {
     console.log('Server is not started, error : ', err);
@@ -41,6 +37,11 @@ app.listen(port, (err) => {
     console.log('Server is started');
   }
 });
+
+
+// use information of client os / browser ..etc
+app.use(useragent.express());
+
 
 // -------------REGISTRATION--------------
 
@@ -196,8 +197,8 @@ const upload = multer({ storage });
 // Set avatar path to db
 const setUrl = (req, res, next) => {
   // path for local server
-  const path = `http://localhost:3000/${req.file.filename}`;
-  db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [path, req.id])
+  const mypath = `http://localhost:3000/${req.file.filename}`;
+  db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [mypath, req.id])
     .then(() => {
       next();
     })
