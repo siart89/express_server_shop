@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 const ProtectedRouter = ({ children, isAuth, path }) => (
   <Route
     path={path}
-    render={() => (
+    render={({ location }) => (
       isAuth ? (
         children
       ) : (
         <Redirect
           to={{
             pathname: '/',
+            state: { from: location },
           }}
         />
       ))}

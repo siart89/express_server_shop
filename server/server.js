@@ -1,4 +1,6 @@
-const express = require('express');
+// const express = require('express');
+import express from 'express';
+
 const pgp = require('pg-promise')({
   promiseLib: Promise,
 });
@@ -8,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const uniqid = require('uniqid');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const path = require('path');
 
 const jsonParser = bodyParser.json();
 
@@ -207,6 +210,7 @@ app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, 
   res.status(200).json({ url: req.file.filename });
 });
 
-app.get('/profile', (req, res) => {
-  res.sendStatus(200);
+
+app.use('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
