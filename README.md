@@ -6,11 +6,17 @@
 ## users : 
  [
   | id         | SERIAL PRIMARY KEY
+  
   | name       | text NOT NULL
+  
   | mail       | text NOT NULL
+  
   | password   | text NOT NULL
+  
   | created_at | timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+  
   | avatar     | text
+  
   | phone      | text
 ]
 
