@@ -42,7 +42,7 @@ app.listen(port, (err) => {
 // use information of client os / browser ..etc
 app.use(useragent.express());
 
-
+app.use(express.static('server/uploads'));
 // -------------REGISTRATION--------------
 
 // check for user with same mail
@@ -89,19 +89,19 @@ const makeNewSession = (req, data, next, id) => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [id, req.ip, req.useragent.os, req.useragent.source,
-        refreshToken, expiredTime, new Date(createdTime), data.name])
+        [id, req.ip, req.useragent.os, req.useragent.source,
+          refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
           jwt.sign({
             id,
             ip: req.ip,
             os: req.useragent.os,
           },
-          secretKey,
-          { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
-            req.userInfo = { token, name: data.name, refreshToken };
-            next();
-          });
+            secretKey,
+            { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
+              req.userInfo = { token, name: data.name, refreshToken };
+              next();
+            });
         });
     });
 };
@@ -181,7 +181,7 @@ app.get('/refresh', useRefreshToken, (req, res) => {
 
 
 // Add Avatar picture
-app.use(express.static('server/uploads'));
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -211,6 +211,26 @@ app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, 
   res.status(200).json({ url: req.file.filename });
 });
 
+// ADD USERS BOOK TO DB
+
+const setBooksInfo = (req, res, next) => {
+  // path for local server
+  const mypath = `http://localhost:3000/${req.file.filename}`;
+  req.cover = mypath;
+  db.none('INSERT INTO books (user_id, title, author, description, cover, price) VALUES ($1, $2, $3, $4, $5, $6)',
+    [req.id, req.body.title, req.body.author, req.body.description, mypath, req.body.price])
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(403);
+    });
+};
+
+app.post('/user/books', upload.single('cover'), authorizationUser, setBooksInfo, (req, res) => {
+  res.json({ path: req.cover });
+});
 
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));

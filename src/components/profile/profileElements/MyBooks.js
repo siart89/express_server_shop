@@ -15,14 +15,32 @@ const MyBooks = () => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState();
   const [cover, setCover] = useState(null);
+  const [url, setUrl] = useState(null);
 
-
-  
+  const handleFetchData = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('cover', cover);
+    formData.append('author', author);
+    formData.append('title', title);
+    formData.append('price', price);
+    formData.append('description', description);
+    const response = await fetch('/user/books', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+      body: formData,
+    });
+    const result = await response.json();
+    setUrl(result.path);
+    setCover(null);
+  };
   return (
     <MyBooksWrapper>
-      <MyBooksForm>
-        <CoverInp htmlFor="cover">
-          <span>Добавить обложку</span>
+      <MyBooksForm onSubmit={handleFetchData} name="my-books">
+        <CoverInp htmlFor="cover" url={url}>
+          {!url && <span> Добавить обложку </span>}
         </CoverInp>
         <input
           type="file"
@@ -51,8 +69,13 @@ const MyBooks = () => {
           type="text"
           name="price"
           placeholder="Цена"
+          onChange={(e) => setPrice(e.target.value)}
         />
-        <TextArea placeholder="Фрагмент текста" />
+        <TextArea
+          placeholder="Фрагмент текста"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
         <SubmitButton>Разместить</SubmitButton>
       </MyBooksForm>
     </MyBooksWrapper>
