@@ -90,7 +90,10 @@ const ProfLinks = styled(Link)`
 
 const ProfContent = styled.div`
   margin-top:20px;
+  max-height: 260px;
   display:grid;
+  grid-column-gap: 50px;
+  grid-template-columns: 1fr minmax(300px, auto);
 `;
 export {
   ProfileWrapper,

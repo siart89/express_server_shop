@@ -1,5 +1,5 @@
 const verifyUser = async () => {
-  const resp = await fetch('/secret', {
+  const resp = await fetch('/user/verify', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -25,7 +25,8 @@ const verifyUser = async () => {
       return false;
     }
   }
-  return true;
+  const result = await resp.json();
+  return result;
 };
 
 export default verifyUser;

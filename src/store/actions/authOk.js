@@ -3,6 +3,7 @@ export default ({
   mail,
   phone,
   avatar,
+  id,
 }) => ({
   type: 'AUTH_OK',
   payload: {
@@ -11,5 +12,6 @@ export default ({
     phone,
     avatar,
     ok: true,
+    id,
   },
 });

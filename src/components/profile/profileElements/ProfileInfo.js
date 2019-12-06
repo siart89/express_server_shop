@@ -9,11 +9,11 @@ import Avatar from './Avatar';
 import logOut from '../../../store/actions/logOut';
 
 const ProfileInfo = () => {
-  const userInfo = useSelector((state) => state.isAuth);
+  const userInfo = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
   return (
     <InfoWrapper>
-      <Avatar url={userInfo.avatar} name={userInfo.name} />
+      <Avatar name={userInfo.name} />
       <Title>
         {`${userInfo.name[0].toUpperCase()}${userInfo.name.slice(1)}`}
       </Title>

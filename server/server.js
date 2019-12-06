@@ -140,7 +140,7 @@ const authorizationUser = (req, res, next) => {
   }
 };
 
-app.use('/secret', authorizationUser, (req, res) => {
+app.use('/user/verify', authorizationUser, (req, res) => {
   db.one('SELECT * FROM users WHERE id = $1', [req.id])
     .then((data) => {
       res.status(200).json({
@@ -148,6 +148,7 @@ app.use('/secret', authorizationUser, (req, res) => {
         mail: data.mail,
         avatar: data.avatar,
         phone: data.phone,
+        id: data.id,
       });
     })
     .catch((err) => {
@@ -215,11 +216,9 @@ app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, 
 // ADD USERS BOOK TO DB
 
 const setBooksInfo = (req, res, next) => {
-  // path for local server
-  const mypath = `http://localhost:3000/resources/${req.file.filename}`;
-  req.cover = mypath;
+// path for local server
   db.none('INSERT INTO books (user_id, title, author, description, cover, price) VALUES ($1, $2, $3, $4, $5, $6)',
-    [req.id, req.body.title, req.body.author, req.body.description, mypath, req.body.price])
+    [req.id, req.body.title, req.body.author, req.body.description, req.body.url, req.body.price])
     .then(() => {
       next();
     })
@@ -228,11 +227,22 @@ const setBooksInfo = (req, res, next) => {
       res.sendStatus(403);
     });
 };
-
-app.post('/api/user/books', upload.single('cover'), authorizationUser, setBooksInfo, (req, res) => {
-  res.json({ path: req.cover });
+// add and get immediately book cover
+app.post('/api/book/cover', upload.single('cover'), (req, res) => {
+  const mypath = `http://localhost:3000/resources/${req.file.filename}`;
+  res.status(200).json({ path: mypath });
 });
 
+app.post('/api/user/books', authorizationUser, jsonParser, setBooksInfo, (req, res) => {
+  res.sendStatus(200);
+});
+
+
+// ** GET USER BOOKLIST
+
+app.get('/api/user/:id/booklist', (req, res) => {
+  console.log(req.params)
+});
 
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
