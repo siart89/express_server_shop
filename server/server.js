@@ -42,7 +42,7 @@ app.listen(port, (err) => {
 // use information of client os / browser ..etc
 app.use(useragent.express());
 
-app.use(express.static('server/uploads'));
+app.use('/resources', express.static(path.join(__dirname, 'uploads')));
 // -------------REGISTRATION--------------
 
 // check for user with same mail
@@ -197,9 +197,10 @@ const upload = multer({ storage });
 // Set avatar path to db
 const setUrl = (req, res, next) => {
   // path for local server
-  const mypath = `http://localhost:3000/${req.file.filename}`;
+  const mypath = `http://localhost:3000/resources/${req.file.filename}`;
   db.none('UPDATE users SET avatar = $1 WHERE id = $2 ', [mypath, req.id])
     .then(() => {
+      req.avaterPath = mypath;
       next();
     })
     .catch(() => {
@@ -208,14 +209,14 @@ const setUrl = (req, res, next) => {
 };
 
 app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, (req, res) => {
-  res.status(200).json({ url: req.file.filename });
+  res.status(200).json({ url: req.avaterPath });
 });
 
 // ADD USERS BOOK TO DB
 
 const setBooksInfo = (req, res, next) => {
   // path for local server
-  const mypath = `http://localhost:3000/${req.file.filename}`;
+  const mypath = `http://localhost:3000/resources/${req.file.filename}`;
   req.cover = mypath;
   db.none('INSERT INTO books (user_id, title, author, description, cover, price) VALUES ($1, $2, $3, $4, $5, $6)',
     [req.id, req.body.title, req.body.author, req.body.description, mypath, req.body.price])
@@ -228,9 +229,10 @@ const setBooksInfo = (req, res, next) => {
     });
 };
 
-app.post('/user/books', upload.single('cover'), authorizationUser, setBooksInfo, (req, res) => {
+app.post('/api/user/books', upload.single('cover'), authorizationUser, setBooksInfo, (req, res) => {
   res.json({ path: req.cover });
 });
+
 
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
