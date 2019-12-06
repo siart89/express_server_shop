@@ -28,6 +28,7 @@ const MyBooks = () => {
       if (resp.ok) {
         const result = await resp.json();
         setBookList(result);
+        console.log(result);
       }
     };
     fetchBookList();

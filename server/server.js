@@ -241,7 +241,14 @@ app.post('/api/user/books', authorizationUser, jsonParser, setBooksInfo, (req, r
 // ** GET USER BOOKLIST
 
 app.get('/api/user/:id/booklist', (req, res) => {
-  console.log(req.params)
+  const { id } = req.params;
+  db.any('SELECT * FROM books WHERE id = $1', [id])
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.sendStatus(403);
+    });
 });
 
 app.use('*', (req, res) => {
