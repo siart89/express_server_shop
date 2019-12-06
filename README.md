@@ -35,7 +35,7 @@
   | title         | text NOT NULL
   | author        | text NOT NULL
   | description   | text NOT NULL
-  | coer          | text NOT NULL
+  | cover          | text NOT NULL
   | price         | money NOT NULL
   | created_at    | timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 ]
