@@ -11,22 +11,45 @@ import {
 import ProfileInfo from '../profile/profileElements/ProfileInfo';
 import authOk from '../../store/actions/authOk';
 import MyBooks from '../profile/profileElements/myBooks/MyBooks';
-import verifyUser from '../actions/verifyUser';
 
 const MainProfile = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.authUser);
 
   useEffect(() => {
-    const verify = async () => {
-      const result = await verifyUser();
-      if (result) {
-        dispatch(authOk(result));
+    const verifyUser = async () => {
+      const resp = await fetch('/user/verify', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+        },
+      });
+      if (resp.status === 403) {
+        const refreshResp = await fetch('/refresh', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('refreshToken'))}`,
+          },
+        });
+        if (refreshResp.ok) {
+          const refreshResult = await refreshResp.json();
+          localStorage.setItem('token', JSON.stringify(refreshResult.token));
+          localStorage.setItem('refreshToken', JSON.stringify(refreshResult.refreshToken));
+          // Repeat request after refresh token
+          verifyUser();
+        } else {
+          dispatch({ type: 'AUTH_DENIED' });
+          return false;
+        }
       } else {
-        dispatch({ type: 'AUTH_DENIED' });
+        const result = await resp.json();
+        dispatch(authOk(result));
       }
+      return true;
     };
-    verify();
+    verifyUser();
   }, [dispatch]);
 
   return (
