@@ -11,6 +11,7 @@ import PopUp from './components/popUp/PopUp';
 import MainProfile from './components/pages/MainProfile';
 import ProtectedRouter from './components/actions/protectedRouter';
 import Header from './components/header/Header';
+import MainBookCard from './components/pages/MainBookCard';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <ProtectedRouter path="/profile" isAuth={activeUser.isLogIn}>
             <MainProfile />
           </ProtectedRouter>
+          <Route path="/book/:id" component={MainBookCard} />
         </Switch>
       </div>
     </Router>

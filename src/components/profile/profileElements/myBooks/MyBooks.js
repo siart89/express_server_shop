@@ -151,7 +151,7 @@ const MyBooks = () => {
           <SubmitButton>Разместить</SubmitButton>
         </MyBooksForm>
       </MyBooksWrapper>
-      <MyBookList list={bookList} />
+      {bookList.length > 0 && <MyBookList list={bookList} />}
     </>
   );
 };
