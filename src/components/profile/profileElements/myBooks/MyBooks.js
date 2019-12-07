@@ -26,6 +26,8 @@ const MyBooks = () => {
 
   const authUser = useSelector((state) => state.authUser);
   const categories = useSelector((state) => state.category);
+
+  // Get current user book list from db
   useEffect(() => {
     const fetchBookList = async () => {
       const resp = await fetch(`/api/user/${authUser.id}/booklist`);
@@ -37,6 +39,7 @@ const MyBooks = () => {
     fetchBookList();
   }, [authUser.id, forUpdate]);
 
+  // Send info about the book to the DB
   const handleFetchData = async (e) => {
     e.preventDefault();
     const bookInfo = {
@@ -65,7 +68,7 @@ const MyBooks = () => {
       setForUpdate(!forUpdate);
     }
   };
-
+  // SEND the book cover and get back path right away
   const handleFetchCover = async (e) => {
     const formData = new FormData();
     formData.append('cover', e.target.files[0]);

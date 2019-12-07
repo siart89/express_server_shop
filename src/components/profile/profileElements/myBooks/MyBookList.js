@@ -12,6 +12,7 @@ const MyBookList = ({ list }) => (
         title={book.title}
         author={book.author}
         price={book.price}
+        id={book.id}
       />
     ))}
   </MyBLWrapper>

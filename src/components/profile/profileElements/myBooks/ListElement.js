@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import {
   BookWrapper,
   InnerMinWrapper,
@@ -13,10 +14,13 @@ const ListElement = ({
   title,
   author,
   price,
+  id,
 }) => (
   <BookWrapper>
     <InnerMinWrapper>
-      <SmallCover url={cover} />
+      <Link to={`/book/${id}`}>
+        <SmallCover url={cover} />
+      </Link>
     </InnerMinWrapper>
     <InnerMaxWrapper>
       <span className="title">{title}</span>
@@ -36,5 +40,6 @@ ListElement.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 export default ListElement;

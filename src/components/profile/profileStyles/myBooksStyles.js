@@ -93,6 +93,7 @@ const SubmitButton = styled.button`
 const MyBLWrapper = styled.div`
   max-height: 255px;
   overflow-y: auto;
+  box-shadow: 0 0 5px #cccccc;
 `;
 const BookWrapper = styled.div`
   display: grid;
@@ -113,6 +114,10 @@ const SmallCover = styled.div`
   background-image:url(${(props) => props.url});
   background-size: cover;
   background-position: center center;
+  &:hover{
+    box-shadow: 3px 0 4px #a8a8a8;
+    transform: scale(1.1);
+  }
 `;
 const InnerMaxWrapper = styled.div`
   display:flex;
