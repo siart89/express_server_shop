@@ -79,6 +79,56 @@ const SubmitButton = styled.button`
   font-weight: bold;
   color: #2e2e2e;
 `;
+
+// ** BOOKLIST STYLES
+const MyBLWrapper = styled.div`
+  max-height: 255px;
+  overflow-y: auto;
+`;
+const BookWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 70px 3fr 1fr;
+  margin-bottom: 3px;
+  padding-bottom: 2px;
+  box-shadow: 0 1px 4px #cccccc;
+`;
+
+const InnerMinWrapper = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:center;
+`;
+const SmallCover = styled.div`
+  width:45px;
+  height:60px;
+  background-image:url(${(props) => props.url});
+  background-size: cover;
+  background-position: center center;
+`;
+const InnerMaxWrapper = styled.div`
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  & .title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.43;
+    color: #181616;
+  }
+  & .author {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.79em;
+    color: #A0A4A5;
+  }
+`;
+const PriceText = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  color: #42CEE2;
+`;
 export {
   MyBooksWrapper,
   MyBooksForm,
@@ -87,4 +137,10 @@ export {
   PriceInp,
   TextArea,
   SubmitButton,
+  BookWrapper,
+  InnerMinWrapper,
+  SmallCover,
+  InnerMaxWrapper,
+  PriceText,
+  MyBLWrapper,
 };

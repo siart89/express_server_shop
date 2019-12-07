@@ -19,6 +19,7 @@ const MyBooks = () => {
   const [url, setUrl] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
   const [bookList, setBookList] = useState([]);
+  const [forUpdate, setForUpdate] = useState(false);
 
   const authUser = useSelector((state) => state.authUser);
 
@@ -28,11 +29,10 @@ const MyBooks = () => {
       if (resp.ok) {
         const result = await resp.json();
         setBookList(result);
-        console.log(result);
       }
     };
     fetchBookList();
-  }, [authUser.id]);
+  }, [authUser.id, forUpdate]);
 
   const handleFetchData = async (e) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ const MyBooks = () => {
       url,
     };
 
-    await fetch('/api/user/books', {
+    const resp = await fetch('/api/user/books', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -52,6 +52,14 @@ const MyBooks = () => {
       },
       body: JSON.stringify(bookInfo),
     });
+    if (resp.ok) {
+      setTitle('');
+      setAuthor('');
+      setPrice('');
+      setDescription('');
+      setUrl('');
+      setForUpdate(!forUpdate);
+    }
   };
 
   const handleFetchCover = async (e) => {
@@ -109,6 +117,7 @@ const MyBooks = () => {
             name="price"
             placeholder="Цена"
             onChange={(e) => setPrice(e.target.value)}
+            value={price}
           />
           <TextArea
             placeholder="Фрагмент текста"

@@ -242,8 +242,9 @@ app.post('/api/user/books', authorizationUser, jsonParser, setBooksInfo, (req, r
 
 app.get('/api/user/:id/booklist', (req, res) => {
   const { id } = req.params;
-  db.any('SELECT * FROM books WHERE id = $1', [id])
+  db.any('SELECT * FROM books WHERE user_id = $1', [id])
     .then((data) => {
+      console.log(data);
       res.json(data);
     })
     .catch(() => {

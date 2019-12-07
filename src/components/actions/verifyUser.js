@@ -24,9 +24,11 @@ const verifyUser = async () => {
     } else {
       return false;
     }
+  } else {
+    const result = await resp.json();
+    return result;
   }
-  const result = await resp.json();
-  return result;
+  return false;
 };
 
 export default verifyUser;
