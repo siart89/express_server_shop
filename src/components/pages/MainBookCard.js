@@ -23,15 +23,16 @@ const MainBookCard = () => {
   return (
     <BookCardWrapper>
       {info && (
-        <BookInfo
-          title={info.title}
-          author={info.author}
-          cover={info.cover}
-          description={info.description}
-        />
+        <>
+          <BookInfo
+            title={info.title}
+            author={info.author}
+            cover={info.cover}
+            description={info.description}
+          />
+          <PriceInfo price={info.price} />
+        </>
       )}
-
-      <PriceInfo />
     </BookCardWrapper>
   );
 };

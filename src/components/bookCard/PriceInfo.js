@@ -1,10 +1,23 @@
 import React from 'react';
-import { PriceInfoWrapper } from './bookCardStyles';
+import {
+  PriceInfoWrapper,
+  PriceTitle,
+  PriceMainText,
+  PriceBtn,
+} from './bookCardStyles';
 
-const PriceInfo = () => {
+const PriceInfo = ({ price }) => {
   return (
     <PriceInfoWrapper>
-      PriceInfo
+      <PriceTitle>
+        {price}
+      </PriceTitle>
+      <PriceMainText>
+        Количество
+      </PriceMainText>
+      <PriceBtn>
+        Купить
+      </PriceBtn>
     </PriceInfoWrapper>
   );
 };
