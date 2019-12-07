@@ -8,6 +8,7 @@ import {
   PriceInp,
   TextArea,
   SubmitButton,
+  Select,
 } from '../../profileStyles/myBooksStyles';
 import MyBookList from './MyBookList';
 
@@ -20,9 +21,10 @@ const MyBooks = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [bookList, setBookList] = useState([]);
   const [forUpdate, setForUpdate] = useState(false);
+  const [category, setCategory] = useState('');
 
   const authUser = useSelector((state) => state.authUser);
-
+  const categories = useSelector((state) => state.category);
   useEffect(() => {
     const fetchBookList = async () => {
       const resp = await fetch(`/api/user/${authUser.id}/booklist`);
@@ -42,6 +44,7 @@ const MyBooks = () => {
       price,
       description,
       url,
+      category,
     };
 
     const resp = await fetch('/api/user/books', {
@@ -89,6 +92,19 @@ const MyBooks = () => {
               </span>
             )}
           </CoverInp>
+          <Select
+            name="category"
+            areaName="category"
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
+            required
+          >
+            {categories.map((elem) => (
+              <option key={elem} value={elem}>
+                {elem}
+              </option>
+            ))}
+          </Select>
           <input
             type="file"
             name="cover"
@@ -103,6 +119,7 @@ const MyBooks = () => {
             placeholder="Название"
             onChange={(e) => setTitle(e.target.value)}
             value={title}
+            required
           />
           <TextInp
             type="text"
@@ -111,6 +128,7 @@ const MyBooks = () => {
             placeholder="Автор"
             onChange={(e) => setAuthor(e.target.value)}
             value={author}
+            required
           />
           <PriceInp
             type="text"
@@ -118,11 +136,13 @@ const MyBooks = () => {
             placeholder="Цена"
             onChange={(e) => setPrice(e.target.value)}
             value={price}
+            required
           />
           <TextArea
             placeholder="Фрагмент текста"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
           <SubmitButton>Разместить</SubmitButton>
         </MyBooksForm>

@@ -217,8 +217,10 @@ app.post('/profile/avatar', upload.single('avatar'), authorizationUser, setUrl, 
 
 const setBooksInfo = (req, res, next) => {
 // path for local server
-  db.none('INSERT INTO books (user_id, title, author, description, cover, price) VALUES ($1, $2, $3, $4, $5, $6)',
-    [req.id, req.body.title, req.body.author, req.body.description, req.body.url, req.body.price])
+  db.none(`INSERT INTO books (user_id, title, author, description, cover, price, category)
+   VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+  [req.id, req.body.title, req.body.author,
+    req.body.description, req.body.url, req.body.price, req.body.category])
     .then(() => {
       next();
     })

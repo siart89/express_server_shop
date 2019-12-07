@@ -15,7 +15,7 @@ const MyBooksForm = styled.form`
   'cover price'
   'cover description'
   'cover description'
-  '... button';
+  'category button';
 `;
 
 const CoverInp = styled.label`
@@ -39,6 +39,15 @@ const CoverInp = styled.label`
     color: #A0A4A5;
     text-align: center;
   }
+`;
+const Select = styled.select`
+ grid-area: ${(props) => props.areaName};
+ border:1px solid #595959;
+ font-size: 12px;
+ font-style: italic;
+ line-height: 1.25;
+ padding-left: 7px;
+ border-radius: 3px;
 `;
 
 const TextInp = styled.input`
@@ -143,4 +152,5 @@ export {
   InnerMaxWrapper,
   PriceText,
   MyBLWrapper,
+  Select,
 };
