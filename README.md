@@ -77,7 +77,7 @@
    
   | count         |smallint CHECK (count > 0 ) DEFAULT 1
   
-  | cost          | money NOT NULL
+  | cost          | numeric NOT NULL
   
 ]
 
