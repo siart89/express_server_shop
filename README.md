@@ -65,3 +65,19 @@
   | created_at    | timestamp with time zone DEFAULT CURRENT_TIMESTAMP
   
 ]
+
+## shop_cart :
+[
+
+  | id            | SERIAL PRIMARY KEY
+  
+  | user_id       | bigint NOT NULLL REFERENCES users (id) ON DELETE CASCADE
+  
+  | book_id       | bigint NOT NULLL REFERENCES users (id) ON DELETE CASCADE
+   
+  | count         |smallint CHECK (count > 0 ) DEFAULT 1
+  
+  | cost          | money NOT NULL
+  
+]
+
