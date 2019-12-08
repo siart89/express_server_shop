@@ -42,6 +42,7 @@ const BookBigCoverBox = styled.div`
 const CoverImg = styled.img`
   max-width:100%;
   max-height:100%;
+  box-shadow: 0 12px 16px #b3b3b3;
 `;
 
 // BOOK PRICE STYLES
@@ -61,7 +62,7 @@ const PriceMainText = styled.span`
   font-size: 12px;
   font-weight: 500;
   color: #a0a4a5;
-  margin: 10px 0;
+
 `;
 const PriceBtn = styled.button`
   width: 260px;
@@ -75,8 +76,37 @@ const PriceBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   border:none;
+  cursor:pointer;
 `;
 
+const CountBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 20px 0 35px;
+  
+`;
+
+const CountBtnWrapper = styled.div`
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  margin-left: 15px;
+`;
+
+const IncDecBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  width: 25px;
+  height:25px;
+  border: 1px solid #d6d6d6;
+  cursor:pointer;
+`;
+
+const CountText = styled(PriceMainText)`
+  color: #1acee2;
+  padding: 0 10px;
+`;
 export {
   BookCardWrapper,
   BookInfoWrapper,
@@ -89,4 +119,8 @@ export {
   PriceTitle,
   PriceMainText,
   PriceBtn,
+  CountBox,
+  CountBtnWrapper,
+  IncDecBtn,
+  CountText,
 };

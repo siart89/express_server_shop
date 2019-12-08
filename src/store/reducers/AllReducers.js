@@ -4,6 +4,7 @@ import PopUpWindow from './PopUpWindow';
 import Mode from './Mode';
 import AuthUser from './AuthUser';
 import Category from './Category';
+import ShopCart from './ShopCart';
 
 export default combineReducers({
   currentUser: CurrentUser,
@@ -11,4 +12,5 @@ export default combineReducers({
   mode: Mode,
   authUser: AuthUser,
   category: Category,
+  cart: ShopCart,
 });
