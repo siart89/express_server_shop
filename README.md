@@ -96,3 +96,5 @@ is_read | boolean DEFAULT false
 author_id | bigint
 
 author_name | text
+
+stars | smallint
