@@ -81,3 +81,18 @@
   
 ]
 
+## comments :
+
+id | SERIAL PRIMARY KEY
+
+book_id | REFERENCES books (id) ON 
+
+text | text NOT NULL
+
+created_at | timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+
+is_read | boolean DEFAULT false
+
+author_id | bigint
+
+author_name | text
