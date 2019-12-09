@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { remove } from 'react-icons-kit/fa/remove';
+import { ruble } from 'react-icons-kit/fa/ruble';
 import { Icon } from 'react-icons-kit';
 import {
   Row,
@@ -68,6 +69,7 @@ const CartRow = ({ id, count }) => {
       </div>
       <CartNumText>
         {cost}
+        <Icon icon={ruble} size={14} />
       </CartNumText>
       <CartDeleteBtn onClick={() => dispatch(removeFromCart(id))}>
         <Icon icon={remove} size={18} />

@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const BackgroundWrapper = styled.section`
   background: #F5F5F5;
 `;
 
-const CartWrapper = styled.section`
+const CartWrapper = styled.div`
   margin: 70px auto 49px;
   width: 100%;
   max-width: 1160px;
@@ -17,12 +17,21 @@ const CartTitle = styled.span`
   font-size: 21px;
   line-height: 25px;
   font-weight: bold;
+  margin: 15px 0;
 `;
 const CartSubTitle = styled.span`
-  text-align: right;
+  align-self: flex-end;
   font-weight: 500;
   font-size: 13px;
   line-height: 15px;
+
+  ${(props) => props.btn && css`
+    cursor: pointer;
+    margin: 10px 0;
+    &:hover{
+      color: #42CEE2;
+    }
+  `}
 `;
 const Row = styled.div`
   background: #fff;
@@ -39,6 +48,7 @@ const RowBookCover = styled.img`
   max-width: 100%;
   width: 100%;
   height:100%;
+  box-shadow: 0 4px 5px #b3b3b3;
 `;
 const RowCursiveText = styled.span`
   font-size: 15px;
@@ -68,9 +78,10 @@ const CartMainText = styled.span`
 
 const CartNumText = styled.span`
   font-size: 16px;
-  line-height: 15px;
   font-weight: 500;
   padding-top:5px;
+  vertical-align:center;
+  align-self: self-start;
 `;
 
 const CartDeleteBtn = styled.div`
@@ -85,6 +96,16 @@ const CartDeleteBtn = styled.div`
     color:#42CEE2;
   }
 `;
+
+// CartResult Styles
+
+const WhiteBGWrapper = styled.section`
+  background:#fff;
+`;
+
+const ResultWrapper = styled(CartWrapper)`
+  align-items: flex-end;
+`;
 export {
   BackgroundWrapper,
   CartWrapper,
@@ -98,4 +119,6 @@ export {
   RowCursiveText,
   CartDeleteBtn,
   RowInfo,
+  WhiteBGWrapper,
+  ResultWrapper,
 };

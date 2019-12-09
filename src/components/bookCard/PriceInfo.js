@@ -11,6 +11,8 @@ import {
 } from './bookCardStyles';
 import CountBtn from './CountBtn';
 import addToCart from '../../store/actions/addToCart';
+import decrement from '../../store/actions/decrement';
+import increment from '../../store/actions/increment';
 
 const PriceInfo = ({ price }) => {
   const [count, setCount] = useState(1);
@@ -19,6 +21,7 @@ const PriceInfo = ({ price }) => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [match, setMatch] = useState(false);
+  const [cartCount, setCartCount] = useState(null);
 
   const handleIncOnClick = (num) => {
     if (num <= 30) {
@@ -53,6 +56,16 @@ const PriceInfo = ({ price }) => {
     checkItemInCart();
   }, [cart, bookId]);
 
+  useEffect(() => {
+    cart.forEach((item) => {
+      if (item.bookId === bookId) {
+        setCartCount(item.count);
+      }
+    });
+  }, [bookId, cart]);
+
+  const decOnClick = match ? () => { dispatch(decrement(bookId)); } : handleDecOnClick;
+  const incOnClick = match ? () => { dispatch(increment(bookId)); } : handleIncOnClick;
   return (
     <PriceInfoWrapper>
       <PriceTitle>
@@ -63,9 +76,9 @@ const PriceInfo = ({ price }) => {
           Количество
         </PriceMainText>
         <CountBtn
-          count={count}
-          decOnClick={handleDecOnClick}
-          incOnClick={handleIncOnClick}
+          count={match ? cartCount : count}
+          decOnClick={decOnClick}
+          incOnClick={incOnClick}
         />
       </CountBox>
       {match ? (
