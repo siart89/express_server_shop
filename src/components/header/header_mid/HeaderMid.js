@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Icon } from 'react-icons-kit';
 import { basket } from 'react-icons-kit/ikons/basket';
 import { starO } from 'react-icons-kit/fa/starO';
@@ -10,10 +11,12 @@ import {
   Cart,
   HeaderMidWrapper,
   SearchForm,
+  FullCart,
 } from '../headerStyles';
 
 const HeaderMid = () => {
   const [isFocus, setIsFocus] = useState(false);
+  const cart = useSelector((state) => state.cart);
 
   return (
     <HeaderMidWrapper>
@@ -34,8 +37,14 @@ const HeaderMid = () => {
         <Favorites>
           <Icon icon={starO} size={22} />
         </Favorites>
-        <Cart>
-          <Icon icon={basket} size={22} />
+        <Cart to="/cart">
+          {cart.length > 0 ? (
+            <FullCart>
+              {cart.reduce((res, cur) => res + cur.count, 0)}
+            </FullCart>
+          ) : (
+            <Icon icon={basket} size={22} />
+          )}
         </Cart>
       </HeaderMidRight>
     </HeaderMidWrapper>

@@ -116,9 +116,25 @@ const HeaderMidRight = styled.div`
   align-items:center;
   justify-content:flex-end;
 `;
-const Cart = styled.span`
+const Cart = styled(Link)`
   color:#000;
+  text-decoration:none;
 `;
+
+const FullCart = styled.span`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:11px;
+  font-weight:bold;
+  color:#E9776C;
+  width: 22px;
+  height: 22px;
+  border-radius: 100%;
+  border: 1px solid #000;
+
+`;
+
 const Favorites = styled.span`
  color:#000;
  margin-right:15px;
@@ -140,4 +156,5 @@ export {
   Cart,
   Favorites,
   SearchForm,
+  FullCart,
 };
