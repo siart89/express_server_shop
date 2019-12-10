@@ -1,13 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { StarLabel, StarInp, StarsWrapper } from './styles';
 
-
-const Stars = () => {
+const Stars = ({ rating }) => {
   const [one, setOne] = useState(false);
   const [two, setTwo] = useState(false);
   const [three, setThree] = useState(false);
   const [four, setFour] = useState(false);
   const [five, setFive] = useState(false);
+  const [pause, setPause] = useState(false);
+  // if one of the point was selected save that position
+  useEffect(() => {
+    if (!one && +rating === 1) {
+      setOne(true);
+    }
+    if (!two && +rating === 2) {
+      setTwo(true);
+    }
+    if (!three && +rating === 3) {
+      setThree(true);
+    }
+    if (!four && +rating === 4) {
+      setFour(true);
+    }
+    if (!five && +rating === 5) {
+      setFive(true);
+    }
+  }, [one, two, three, four, five, rating]);
+
+  // if it was clicked on less rating position , drop prev position
+  useEffect(() => {
+    setTwo(false);
+    setThree(false);
+    setFour(false);
+    setFive(false);
+  }, [rating]);
+  // reset all the stars if will be choosing another one
+  const handleOnEnter = (func) => {
+    setOne(false);
+    setTwo(false);
+    setThree(false);
+    setFour(false);
+    setFive(false);
+    func(true);
+    setPause(false);
+  };
+  // if pause was setted on this star don't reset chosen star
+  const handleOnLeave = (func) => {
+    if (!pause) {
+      func(false);
+    }
+  };
+
   return (
 
     <StarsWrapper>
@@ -19,8 +63,9 @@ const Stars = () => {
         three={three}
         four={four}
         five={five}
-        onMouseEnter={() => setOne(true)}
-        onMouseLeave={() => setOne(false)}
+        onClick={() => setPause(true)}
+        onMouseEnter={() => handleOnEnter(setOne)}
+        onMouseLeave={() => handleOnLeave(setOne)}
       >
         ★
       </StarLabel>
@@ -31,8 +76,9 @@ const Stars = () => {
         three={three}
         four={four}
         five={five}
-        onMouseEnter={() => setTwo(true)}
-        onMouseLeave={() => setTwo(false)}
+        onClick={() => setPause(true)}
+        onMouseEnter={() => handleOnEnter(setTwo)}
+        onMouseLeave={() => handleOnLeave(setTwo)}
       >
         ★
       </StarLabel>
@@ -42,8 +88,9 @@ const Stars = () => {
         three={three}
         four={four}
         five={five}
-        onMouseEnter={() => setThree(true)}
-        onMouseLeave={() => setThree(false)}
+        onClick={() => setPause(true)}
+        onMouseEnter={() => handleOnEnter(setThree)}
+        onMouseLeave={() => handleOnLeave(setThree)}
       >
         ★
       </StarLabel>
@@ -53,8 +100,9 @@ const Stars = () => {
         className="four"
         four={four}
         five={five}
-        onMouseEnter={() => setFour(true)}
-        onMouseLeave={() => setFour(false)}
+        onClick={() => setPause(true)}
+        onMouseEnter={() => handleOnEnter(setFour)}
+        onMouseLeave={() => handleOnLeave(setFour)}
       >
         ★
       </StarLabel>
@@ -62,8 +110,9 @@ const Stars = () => {
         htmlFor="five"
         className="five"
         five={five}
-        onMouseEnter={() => setFive(true)}
-        onMouseLeave={() => setFive(false)}
+        onClick={() => setPause(true)}
+        onMouseEnter={() => handleOnEnter(setFive)}
+        onMouseLeave={() => handleOnLeave(setFive)}
       >
         ★
       </StarLabel>
@@ -78,6 +127,13 @@ const Stars = () => {
     </StarsWrapper>
 
   );
+};
+Stars.defaultProps = {
+  rating: null,
+};
+
+Stars.propTypes = {
+  rating: PropTypes.string,
 };
 
 export default Stars;

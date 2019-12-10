@@ -44,7 +44,11 @@ const Comments = ({ title, closeOnClick, bookId }) => {
       setMessage(true);
     }
   };
-
+  console.log(rating)
+  const handleFormChangeEvents = (e) => {
+    setRating(e.target.value);
+    setMessage(false);
+  };
   return (
     <PopUpWrapper>
       <CommentWrapper>
@@ -65,7 +69,7 @@ const Comments = ({ title, closeOnClick, bookId }) => {
         </FlexBox>
         <form
           onSubmit={handleFetchData}
-          onChange={() => setMessage(false)}
+          onChange={handleFormChangeEvents}
         >
           <FlexBox>
             <ComMainLabel htmlFor="comment">
@@ -92,11 +96,11 @@ const Comments = ({ title, closeOnClick, bookId }) => {
                   required
                 />
               </ComMainLabel>
-              <div style={{marginTop: '12px'}}>
+              <div style={{ marginTop: '12px' }}>
                 <CommentMainText>
                   Общее впечатление :
                 </CommentMainText>
-                <Stars setRating={(e) => setRating(e.target.value)} />
+                <Stars rating={rating} />
               </div>
             </RowGrid>
             <CommentBtn type="submit">
