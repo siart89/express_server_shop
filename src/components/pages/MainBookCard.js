@@ -27,7 +27,11 @@ const MainBookCard = () => {
   return (
     <>
       {showComment && (
-        <Comments closeOnClick={handleCloseComment} title={info.title} />
+        <Comments
+          closeOnClick={handleCloseComment}
+          title={info.title}
+          bookId={id}
+        />
       )}
       <BookCardWrapper>
         {info && (

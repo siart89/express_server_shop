@@ -85,7 +85,7 @@
 
 id | SERIAL PRIMARY KEY
 
-book_id | REFERENCES books (id) ON 
+book_id | REFERENCES books (id) ON DELETE CASCADE
 
 text | text NOT NULL
 

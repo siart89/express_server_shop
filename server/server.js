@@ -264,6 +264,23 @@ app.get('/book/card/:id', (req, res) => {
     .catch(() => res.sendStatus(403));
 });
 
+
+// ADD Comment to DB
+
+app.use('/book/comment', jsonParser, (req, res) => {
+  db.none('INSERT INTO comments (book_id, text, author_name) VALUES ($1, $2, $3);',
+    [req.body.bookId, req.body.text, req.body.author])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+      console.log(err)
+    });
+  console.log(req.body)
+});
+
+
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });

@@ -27,6 +27,10 @@ const CommentMainText = styled.span`
   ${(props) => props.main && css`
     font-size: 16px;
   `};
+  ${(props) => props.alarm && css`
+    font-size: 16px;
+    color:red;
+  `};
   ${(props) => props.book && css`
     font-family: 'Roboto', sans-serif;
     color: #a0a4a5;
@@ -46,7 +50,7 @@ const CommentBtn = styled(FormBtn)`
   }
 `;
 const NameInp = styled(Input)`
-  width: 50%;
+  width: 90%;
   border-radius: 5px;
 `;
 
@@ -59,7 +63,7 @@ const TextField = styled.textarea`
   height: 150px;
   resize: none;
   border-radius: 5px;
-  font-size:12px;
+  font-size:14px;
   padding: 5px 4px;
 `;
 
@@ -67,6 +71,49 @@ const CloseButton = styled(CloseBtn)`
   position:absolute;
   right: 4px;
   top: 5px;
+`;
+const StarLabel = styled.label`
+  cursor:pointer;
+  font-size: 32px;
+  color: rgba(209, 209, 209, 0.6);
+   ${(props) => props.five && css`
+      &.one, &.two, &.three, &.four, &.five {
+      color:#f7be20;
+      };
+   `} 
+   ${(props) => props.four && css`
+      &.one, &.two, &.three, &.four {
+      color:#f7be20;
+      };
+   `} 
+   ${(props) => props.three && css`
+      &.one, &.two, &.three {
+      color:#f7be20;
+      };
+   `} 
+   ${(props) => props.two && css`
+      &.one, &.two {
+      color:#f7be20;
+      };
+   `} 
+   ${(props) => props.one && css`
+      &.one {
+      color:#f7be20;
+      };
+   `} 
+`;
+
+const StarInp = styled.input`
+  display:none;
+`;
+const RowGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+`;
+const StarsWrapper = styled.div`
+  display:flex;
+  justify-content:center;
+  align-items:center;
 `;
 export {
   CommentWrapper,
@@ -77,4 +124,8 @@ export {
   ComMainLabel,
   TextField,
   CloseButton,
+  StarLabel,
+  RowGrid,
+  StarInp,
+  StarsWrapper,
 };
