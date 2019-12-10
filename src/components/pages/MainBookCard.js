@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BookCardWrapper } from '../bookCard/bookCardStyles';
+import { BookCardWrapper, ShowComBtn } from '../bookCard/bookCardStyles';
 import BookInfo from '../bookCard/BookInfo';
 import PriceInfo from '../bookCard/PriceInfo';
+import Comments from '../comments/Comments';
 
 const MainBookCard = () => {
   const [info, setInfo] = useState(null);
   const { id } = useParams();
+  const [showComment, setShowComment] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(`/book/card/${id}`);
@@ -19,21 +21,31 @@ const MainBookCard = () => {
     };
     fetchData();
   }, [id]);
-  console.log(info);
+  const handleCloseComment = () => {
+    setShowComment(false);
+  };
   return (
-    <BookCardWrapper>
-      {info && (
-        <>
-          <BookInfo
-            title={info.title}
-            author={info.author}
-            cover={info.cover}
-            description={info.description}
-          />
-          <PriceInfo price={info.price} />
-        </>
+    <>
+      {showComment && (
+        <Comments closeOnClick={handleCloseComment} title={info.title} />
       )}
-    </BookCardWrapper>
+      <BookCardWrapper>
+        {info && (
+          <>
+            <BookInfo
+              title={info.title}
+              author={info.author}
+              cover={info.cover}
+              description={info.description}
+            />
+            <PriceInfo price={info.price} />
+          </>
+        )}
+        <ShowComBtn onClick={() => setShowComment(true)}>
+          Написать отзыв
+        </ShowComBtn>
+      </BookCardWrapper>
+    </>
   );
 };
 

@@ -4,7 +4,9 @@ import { ProfileWrapper } from '../profile/profileStyles/styles';
 const BookCardWrapper = styled(ProfileWrapper)`
   grid-column-gap: 150px;
   grid-template-columns: 2fr 1fr;
+  grid-row-gap: 55px;
 `;
+
 // BOOK INFO STYLES
 const BookInfoWrapper = styled.div`
   display:flex;
@@ -107,6 +109,13 @@ const CountText = styled(PriceMainText)`
   color: #1acee2;
   padding: 0 10px;
 `;
+
+const ShowComBtn = styled(PriceBtn)`
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  box-shadow:2px 2px 3px #b3b3b3;
+`;
 export {
   BookCardWrapper,
   BookInfoWrapper,
@@ -123,4 +132,5 @@ export {
   CountBtnWrapper,
   IncDecBtn,
   CountText,
+  ShowComBtn,
 };

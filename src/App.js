@@ -13,6 +13,7 @@ import ProtectedRouter from './components/actions/protectedRouter';
 import Header from './components/header/Header';
 import MainBookCard from './components/pages/MainBookCard';
 import Cart from './components/pages/Cart';
+import Comments from './components/comments/Comments';
 
 
 function App() {
