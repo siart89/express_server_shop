@@ -8,6 +8,8 @@ import {
   BookBigCoverBox,
   CoverImg,
 } from './bookCardStyles';
+import BookRating from './BookRating';
+import { RowGrid } from '../comments/styles';
 
 const BookInfo = ({
   title,
@@ -19,9 +21,12 @@ const BookInfo = ({
     <BookTitle>
       {title}
     </BookTitle>
-    <BookStyledText>
-      {author}
-    </BookStyledText>
+    <RowGrid>
+      <BookStyledText>
+        {author}
+      </BookStyledText>
+      <BookRating />
+    </RowGrid>
     <BookBigCoverBox>
       <CoverImg src={cover} />
     </BookBigCoverBox>

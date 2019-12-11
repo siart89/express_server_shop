@@ -116,6 +116,17 @@ const ShowComBtn = styled(PriceBtn)`
   border: 1px solid #000;
   box-shadow:2px 2px 3px #b3b3b3;
 `;
+
+// BookRating styles
+
+const ROStarWrapper = styled.div`
+  display:flex;
+  justify-content:flex-end;
+`;
+const BookReadOnlyStars = styled.span`
+  font-size: 32px;
+  color: rgba(209, 209, 209, 0.6);
+`;
 export {
   BookCardWrapper,
   BookInfoWrapper,
@@ -133,4 +144,6 @@ export {
   IncDecBtn,
   CountText,
   ShowComBtn,
+  ROStarWrapper,
+  BookReadOnlyStars,
 };

@@ -5,6 +5,7 @@ import BookInfo from '../bookCard/BookInfo';
 import PriceInfo from '../bookCard/PriceInfo';
 import Comments from '../comments/Comments';
 import CommentBLock from '../commentBlock/CommentBlock';
+import { GridBox } from '../commentBlock/styles';
 
 const MainBookCard = () => {
   const [info, setInfo] = useState(null);
@@ -78,7 +79,7 @@ const MainBookCard = () => {
               text={item.text}
             />
           ))
-        ) : <span>Отзывов нет</span>}
+        ) : <GridBox>Отзывов нет</GridBox>}
         <ShowComBtn onClick={handleShowComments}>
           Написать отзыв
         </ShowComBtn>
