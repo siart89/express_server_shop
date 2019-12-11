@@ -24,6 +24,11 @@ const MainBookCard = () => {
   const handleCloseComment = () => {
     setShowComment(false);
   };
+  const handleShowComments = () => {
+    if (info) {
+      setShowComment(true);
+    }
+  };
   return (
     <>
       {showComment && (
@@ -45,7 +50,7 @@ const MainBookCard = () => {
             <PriceInfo price={info.price} />
           </>
         )}
-        <ShowComBtn onClick={() => setShowComment(true)}>
+        <ShowComBtn onClick={handleShowComments}>
           Написать отзыв
         </ShowComBtn>
       </BookCardWrapper>
