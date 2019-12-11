@@ -268,16 +268,16 @@ app.get('/book/card/:id', (req, res) => {
 // ADD Comment to DB
 
 app.use('/book/comment', jsonParser, (req, res) => {
-  db.none('INSERT INTO comments (book_id, text, author_name) VALUES ($1, $2, $3);',
-    [req.body.bookId, req.body.text, req.body.author])
+  db.none('INSERT INTO comments (book_id, text, author_name, rating) VALUES ($1, $2, $3, $4);',
+    [req.body.bookId, req.body.text, req.body.author, req.body.rating])
     .then(() => {
       res.sendStatus(200);
     })
     .catch((err) => {
       res.sendStatus(500);
-      console.log(err)
+      // eslint-disable-next-line no-console
+      console.log(err);
     });
-  console.log(req.body)
 });
 
 
