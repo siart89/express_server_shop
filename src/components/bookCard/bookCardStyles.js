@@ -4,7 +4,7 @@ import { ProfileWrapper } from '../profile/profileStyles/styles';
 const BookCardWrapper = styled(ProfileWrapper)`
   grid-column-gap: 150px;
   grid-template-columns: 2fr 1fr;
-  grid-row-gap: 55px;
+  grid-row-gap: 15px;
 `;
 
 // BOOK INFO STYLES
