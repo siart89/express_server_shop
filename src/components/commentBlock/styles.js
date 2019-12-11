@@ -13,7 +13,7 @@ const Block = styled.div`
   grid-gap: 10px;
   width: 450px;
   border: 1px solid #ededed;
-  padding: 7px 4px;
+  padding: 7px 10px;
 `;
 
 const TextBlock = styled.div`
@@ -24,6 +24,9 @@ const BlockTitle = styled.span`
   font-size: 12px;
   color: #000;
   ${(props) => props.date && css`
+    color: #A0A4A5;
+  `}
+  ${(props) => props.main && css`
     color: #A0A4A5;
   `}
 `;

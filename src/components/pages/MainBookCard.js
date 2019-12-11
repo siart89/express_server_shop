@@ -30,11 +30,14 @@ const MainBookCard = () => {
       const resp = await fetch(`/book/comment/book/${id}`);
       if (resp.ok) {
         const result = await resp.json();
+        // const rev = result.reverse();
         setComment(result);
       }
     };
-    fetchingComments();
-  }, [id]);
+    if (!showComment) {
+      fetchingComments();
+    }
+  }, [id, showComment]);
 
   const handleCloseComment = () => {
     setShowComment(false);

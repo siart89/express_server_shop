@@ -267,7 +267,7 @@ app.get('/book/card/:id', (req, res) => {
 // GET Comments from DB
 
 app.get('/book/comment/book/:id', (req, res) => {
-  db.any('SELECT * FROM comments WHERE book_id = $1', [req.params.id])
+  db.any('SELECT * FROM comments WHERE book_id = $1 ORDER BY created_at DESC', [req.params.id])
     .then((data) => {
       res.status(200).json(data);
     })
@@ -277,11 +277,12 @@ app.get('/book/comment/book/:id', (req, res) => {
 
 // ADD Comment to DB
 
-app.use('/book/comment', jsonParser, (req, res) => {
+app.use('/book/comment', jsonParser, (req, res, next) => {
+  req.bookId = req.body.bookId;
   db.none('INSERT INTO comments (book_id, text, author_name, rating) VALUES ($1, $2, $3, $4);',
     [req.body.bookId, req.body.text, req.body.author, req.body.rating])
     .then(() => {
-      res.sendStatus(200);
+      next();
     })
     .catch((err) => {
       res.sendStatus(500);
@@ -289,7 +290,30 @@ app.use('/book/comment', jsonParser, (req, res) => {
       console.log(err);
     });
 });
+// Calculate and set book rating
+const calcBookRating = (arr) => {
+  const ratingSum = arr.reduce((sum, cur) => sum + cur.rating, 0);
+  return ratingSum / arr.length;
+};
 
+app.use((req, res, next) => {
+  db.any('SELECT rating FROM comments WHERE book_id = $1 AND rating <> $2', [req.bookId, 0])
+    .then((data) => {
+      const bookRating = Math.floor(calcBookRating(data) * 10) / 10;
+      req.rating = bookRating;
+      next();
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
+});
+
+app.use((req, res) => {
+  db.none('UPDATE books SET rating = $1 WHERE id = $2', [req.rating, req.bookId])
+    .then(() => res.sendStatus(200))
+    .catch(() => res.sendStatus(500));
+});
 
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   GridBox,
@@ -15,15 +15,13 @@ const CommentBLock = ({
   date,
   text,
 }) => {
-  const [formatDate, setFormatDate] = useState('');
-
-  useEffect(() => {
-    const dateNum = date.match(/\d{4}-\d{2}-\d{2}/g);
-    const toOurFormat = dateNum.join('-').split('-').reverse().join('-');
-    const timeNum = date.match(/(\d{2}:\d{2})(?=:)/g);
-    const strDate = `${timeNum} ${toOurFormat}`;
-    setFormatDate(strDate);
-  }, [date]);
+  const formatDate = new Date(date).toLocaleString('ru', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
   return (
     <GridBox>
       <Block>
