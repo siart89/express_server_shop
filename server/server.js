@@ -89,19 +89,19 @@ const makeNewSession = (req, data, next, id) => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [id, req.ip, req.useragent.os, req.useragent.source,
-          refreshToken, expiredTime, new Date(createdTime), data.name])
+      [id, req.ip, req.useragent.os, req.useragent.source,
+        refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
           jwt.sign({
             id,
             ip: req.ip,
             os: req.useragent.os,
           },
-            secretKey,
-            { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
-              req.userInfo = { token, name: data.name, refreshToken };
-              next();
-            });
+          secretKey,
+          { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
+            req.userInfo = { token, name: data.name, refreshToken };
+            next();
+          });
         });
     });
 };
@@ -219,7 +219,7 @@ const setBooksInfo = (req, res, next) => {
   // path for local server
   db.none(`INSERT INTO books (user_id, title, author, description, cover, price, category)
    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-    [req.id, req.body.title, req.body.author,
+  [req.id, req.body.title, req.body.author,
     req.body.description, req.body.url, req.body.price, req.body.category])
     .then(() => {
       next();
@@ -290,6 +290,7 @@ app.use('/book/comment', jsonParser, (req, res, next) => {
       console.log(err);
     });
 });
+
 // Calculate and set book rating
 const calcBookRating = (arr) => {
   const ratingSum = arr.reduce((sum, cur) => sum + cur.rating, 0);

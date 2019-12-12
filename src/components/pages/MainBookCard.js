@@ -65,6 +65,7 @@ const MainBookCard = () => {
               author={info.author}
               cover={info.cover}
               description={info.description}
+              rating={info.rating}
             />
             <PriceInfo price={info.price} />
           </>

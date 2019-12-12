@@ -16,6 +16,7 @@ const BookInfo = ({
   author,
   cover,
   description,
+  rating,
 }) => (
   <BookInfoWrapper>
     <BookTitle>
@@ -25,7 +26,7 @@ const BookInfo = ({
       <BookStyledText>
         {author}
       </BookStyledText>
-      <BookRating />
+      <BookRating rating={rating} />
     </RowGrid>
     <BookBigCoverBox>
       <CoverImg src={cover} />
@@ -35,12 +36,15 @@ const BookInfo = ({
     </BookMainText>
   </BookInfoWrapper>
 );
-
+BookInfo.defaultProps = {
+  rating: null,
+};
 BookInfo.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   cover: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  rating: PropTypes.number,
 };
 
 export default BookInfo;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ProfileWrapper } from '../profile/profileStyles/styles';
 
 const BookCardWrapper = styled(ProfileWrapper)`
@@ -127,6 +127,60 @@ const BookReadOnlyStars = styled.span`
   font-size: 32px;
   color: rgba(209, 209, 209, 0.6);
 `;
+
+const SvgStar = styled.svg.attrs((props) => ({
+  starFill: () => {
+    switch (props.rating) {
+    case 1:
+      return css`
+        &#one path {
+          fill: #f7be20;
+        }
+        `;
+    case 2:
+      return css`
+        &#one path, &#two path {
+          fill: #f7be20;
+        }
+          `;
+    case 3:
+      return css`
+        &#one path, &#two path, &#three path {
+          fill: #f7be20;
+        }
+        `;
+    case 4:
+      return css`
+         &#one path, &#two path, &#three path, &#four path {
+          fill: #f7be20;
+        }
+        `;
+    case 5:
+      return css`
+          & path {
+          fill: #f7be20;
+        }
+        `;
+    default:
+      return '';
+    }
+  },
+}))`
+& path {
+    fill: rgba(209, 209, 209, 0.6);
+  }
+
+${(props) => props.starFill}
+
+${(props) => props.isdec && css`
+& path {
+    fill: url(#grad);
+  }
+`}
+  
+
+`;
+
 export {
   BookCardWrapper,
   BookInfoWrapper,
@@ -146,4 +200,5 @@ export {
   ShowComBtn,
   ROStarWrapper,
   BookReadOnlyStars,
+  SvgStar,
 };
