@@ -23,15 +23,16 @@ const MainBookCard = () => {
         setInfo(null);
       }
     };
-    fetchData();
-  }, [id]);
+    if (!showComment) {
+      fetchData();
+    }
+  }, [id, showComment]);
 
   useEffect(() => {
     const fetchingComments = async () => {
       const resp = await fetch(`/book/comment/book/${id}`);
       if (resp.ok) {
         const result = await resp.json();
-        // const rev = result.reverse();
         setComment(result);
       }
     };
@@ -66,6 +67,7 @@ const MainBookCard = () => {
               cover={info.cover}
               description={info.description}
               rating={info.rating}
+              bookId={info.id}
             />
             <PriceInfo price={info.price} />
           </>

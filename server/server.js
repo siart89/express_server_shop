@@ -89,19 +89,19 @@ const makeNewSession = (req, data, next, id) => {
       // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [id, req.ip, req.useragent.os, req.useragent.source,
-        refreshToken, expiredTime, new Date(createdTime), data.name])
+        [id, req.ip, req.useragent.os, req.useragent.source,
+          refreshToken, expiredTime, new Date(createdTime), data.name])
         .then(() => {
           jwt.sign({
             id,
             ip: req.ip,
             os: req.useragent.os,
           },
-          secretKey,
-          { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
-            req.userInfo = { token, name: data.name, refreshToken };
-            next();
-          });
+            secretKey,
+            { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
+              req.userInfo = { token, name: data.name, refreshToken };
+              next();
+            });
         });
     });
 };
@@ -219,7 +219,7 @@ const setBooksInfo = (req, res, next) => {
   // path for local server
   db.none(`INSERT INTO books (user_id, title, author, description, cover, price, category)
    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-  [req.id, req.body.title, req.body.author,
+    [req.id, req.body.title, req.body.author,
     req.body.description, req.body.url, req.body.price, req.body.category])
     .then(() => {
       next();
@@ -263,6 +263,39 @@ app.get('/book/card/:id', (req, res) => {
     })
     .catch(() => res.sendStatus(403));
 });
+
+// SET FAVORITES
+
+app.use('/profile/user/:id/favorites', (req, res) => {
+  const userId = req.params.id;
+  db.any(`SELECT * FROM favorites 
+          INNER JOIN books ON favorites.book_id = books.id
+          WHERE favorites.user_id = $1;`, [userId])
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+const checkInDb = (req, res, next) => {
+  db.none('SELECT * FROM favorites WHERE book_id = $1 AND user_id = $2;', [req.params.bookId, req.params.userId])
+    .then(() => {
+      next();
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+};
+app.use('/favorites/user:userId/book:bookId', checkInDb, (req, res) => {
+  db.none('INSERT INTO favorites (book_id, user_id) VALUES ($1, $2);', [req.params.bookId, req.params.userId])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => res.sendStatus(500));
+});
+
 
 // GET Comments from DB
 
@@ -316,6 +349,9 @@ app.use((req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-app.use('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-});
+
+
+
+// app.use('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../public/index.html'));
+// });

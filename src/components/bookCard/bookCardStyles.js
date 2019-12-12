@@ -12,7 +12,11 @@ const BookInfoWrapper = styled.div`
   display:flex;
   flex-direction: column;
 `;
-
+const TitleRowGrid = styled.div`
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+`;
 const BookTitle = styled.h1`
   font-size: 30px;
   font-weight: 500;
@@ -185,6 +189,7 @@ export {
   BookCardWrapper,
   BookInfoWrapper,
   PriceInfoWrapper,
+  TitleRowGrid,
   BookTitle,
   BookStyledText,
   BookMainText,
