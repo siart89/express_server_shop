@@ -12,6 +12,7 @@ const makeNewSession = (req, data, next, id) => {
   const createdTime = Date.now();
   const expiredTime = new Date(createdTime + (24 * 60 * 60 * 1000));
   const refreshToken = uniqid();
+  console.log(refreshToken);
   // clear user session , expected 1 user session for each
   db.none('DELETE FROM sessions WHERE user_id = $1', [id])
     .then(() => {
@@ -27,8 +28,18 @@ const makeNewSession = (req, data, next, id) => {
             os: req.useragent.os,
           },
           secretKey,
-          { algorithm: 'HS256', expiresIn: '1h' }, (err, token) => {
-            req.userInfo = { token, name: data.name, refreshToken };
+          { algorithm: 'HS256', expiresIn: '3s' }, (err, token) => {
+            if (err) {
+              console.log(err)
+            }
+            console.log('tytytytytytytyty')
+            req.userInfo = {
+              token,
+              name: data.name,
+              refreshToken,
+              id,
+            };
+            console.log('nexxxxxt')
             next();
           });
         });

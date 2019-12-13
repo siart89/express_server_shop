@@ -24,13 +24,19 @@ const MyBooks = () => {
   const [forUpdate, setForUpdate] = useState(false);
   const [category, setCategory] = useState('');
 
-  const authUser = useSelector((state) => state.authUser);
+  const authUser = useSelector((state) => state.currentUser);
   const categories = useSelector((state) => state.category);
 
   // Get current user book list from db
   useEffect(() => {
     const fetchBookList = async () => {
-      const resp = await fetch(`/api/user/${authUser.id}/booklist`);
+      const resp = await fetch(`/api/user/${authUser.id}/booklist`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
+        },
+      });
       if (resp.ok) {
         const result = await resp.json();
         setBookList(result);

@@ -17,7 +17,7 @@ import increment from '../../store/actions/increment';
 const PriceInfo = ({ price }) => {
   const [count, setCount] = useState(1);
   const { id: bookId } = useParams();
-  const { id: userId } = useSelector((state) => state.authUser);
+  const { id: userId } = useSelector((state) => state.currentUser);
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [match, setMatch] = useState(false);

@@ -4,9 +4,8 @@ import uniqid from 'uniqid';
 import multer from 'multer';
 import path from 'path';
 import registration from './components/registration';
-import { authentication } from './components/authentication';
 import { authorization } from './components/authorization';
-import refreshToken from './components/refreshToken';
+import { authentication } from './components/authentication';
 import setAvatar from './components/setAvatar';
 import addBook from './components/addBook';
 import userBookList from './components/userBookList';
@@ -55,8 +54,6 @@ registration(app);
 authentication(app);
 // **AUTHORIZATION--------------------
 authorization(app);
-// **REFRESH TOKEN ------------------
-refreshToken(app);
 // Add Avatar picture
 setAvatar(app, upload);
 // ADD USERS BOOK TO DB

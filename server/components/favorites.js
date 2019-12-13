@@ -1,17 +1,30 @@
 import db from './db';
+import { checkToken } from './authorization';
 
 export default (app) => {
-  app.use('/profile/user/:id/favorites', (req, res) => {
-    const userId = req.params.id;
-    db.any(`SELECT * FROM favorites 
-            INNER JOIN books ON favorites.book_id = books.id
-            WHERE favorites.user_id = $1;`, [userId])
-      .then((data) => {
-        console.log("rata")
-        console.log(data);
+  app.use('/profile/user:id/book:bookId/favorites/remove', checkToken, (req, res) => {
+
+    const { id, bookId } = req.params;
+
+    db.none('DELETE FROM favorites WHERE user_id = $1 AND book_id = $2', [id, bookId])
+      .then(() => {
+        res.status(200).json({ isFavor: true });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        res.sendStatus(500);
+      });
+  });
+
+  app.use('/profile/user:id/book:bookId/favorites', checkToken, (req, res) => {
+    const { id, bookId } = req.params;
+    db.one(`SELECT * FROM favorites 
+            INNER JOIN books ON favorites.book_id = books.id
+            WHERE favorites.user_id = $1 AND favorites.book_id=$2;`, [id, bookId])
+      .then(() => {
+        res.status(200).json({ isFavor: true });
+      })
+      .catch(() => {
+        res.json({ isFavor: false });
       });
   });
 
@@ -25,7 +38,7 @@ export default (app) => {
       });
   };
 
-  app.use('/favorites/user:userId/book:bookId', checkInDb, (req, res) => {
+  app.use('/favorites/user:userId/book:bookId', checkToken, checkInDb, (req, res) => {
     db.none('INSERT INTO favorites (book_id, user_id) VALUES ($1, $2);', [req.params.bookId, req.params.userId])
       .then(() => {
         res.sendStatus(200);

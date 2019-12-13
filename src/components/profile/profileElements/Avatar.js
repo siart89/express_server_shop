@@ -10,7 +10,7 @@ import setUrl from '../../../store/actions/setUrl';
 
 
 const Avatar = ({ name }) => {
-  const url = useSelector((state) => state.authUser.avatar);
+  const url = useSelector((state) => state.currentUser.url);
   const dispatch = useDispatch();
 
   const handleSendData = async (e) => {

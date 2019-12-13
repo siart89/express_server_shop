@@ -37,7 +37,7 @@ const LogIn = () => {
       if (res.ok) {
         const result = await res.json();
         // set Token and userName into local storage
-        dispatch(logIn(result.name));
+        dispatch(logIn(result.name, result.id));
 
         localStorage.setItem('token', JSON.stringify(result.token));
         localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));

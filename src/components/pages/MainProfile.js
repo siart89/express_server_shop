@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   ProfileWrapper,
   ProfLinks,
@@ -9,13 +9,14 @@ import {
   ProfContent,
 } from '../profile/profileStyles/styles';
 import ProfileInfo from '../profile/profileElements/ProfileInfo';
-import authOk from '../../store/actions/authOk';
 import MyBooks from '../profile/profileElements/myBooks/MyBooks';
 import Favorites from '../favorites/Favorites';
+import setUrl from '../../store/actions/setUrl';
+
 
 const MainProfile = () => {
+  const [isAuth, setIsAuth] = useState(false);
   const dispatch = useDispatch();
-  const authUser = useSelector((state) => state.authUser);
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -23,58 +24,49 @@ const MainProfile = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
         },
       });
-      if (resp.status === 403) {
-        const refreshResp = await fetch('/refresh', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('refreshToken'))}`,
-          },
-        });
-        if (refreshResp.ok) {
-          const refreshResult = await refreshResp.json();
-          localStorage.setItem('token', JSON.stringify(refreshResult.token));
-          localStorage.setItem('refreshToken', JSON.stringify(refreshResult.refreshToken));
-          // Repeat request after refresh token
-          verifyUser();
-        } else {
-          dispatch({ type: 'AUTH_DENIED' });
-          return false;
-        }
-      } else {
+      if (resp.ok) {
         const result = await resp.json();
-        dispatch(authOk(result));
+        console.log(result)
+        if (result.token) {
+          localStorage.setItem('token', JSON.stringify(result.token));
+          localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+        }
+        dispatch(setUrl(result.avatar));
+        setIsAuth(true);
+      } else {
+        setIsAuth(false);
       }
-      return true;
     };
     verifyUser();
   }, [dispatch]);
 
   return (
-    authUser.ok ? (
-      <ProfileWrapper>
-        <ProfileInfo />
-        <ProfContentWrapper>
-          <LinksWrapper>
-            <ProfLinks to="/profile/mybooks">Мои книги</ProfLinks>
-            <ProfLinks to="/profile/favorites">Избранное</ProfLinks>
-          </LinksWrapper>
-          <ProfContent>
-            <Switch>
-              <Route path="/profile/mybooks" component={MyBooks} />
-              <Route path="/profile/favorites" component={Favorites} />
-            </Switch>
-          </ProfContent>
-        </ProfContentWrapper>
-      </ProfileWrapper>
-    ) : (
-      <h1 style={{ textAlign: 'center' }}>
-          Loading...
-      </h1>
-    )
+    <>
+      {isAuth ? (
+        <ProfileWrapper>
+          <ProfileInfo />
+          <ProfContentWrapper>
+            <LinksWrapper>
+              <ProfLinks to="/profile/mybooks">Мои книги</ProfLinks>
+              <ProfLinks to="/profile/favorites">Избранное</ProfLinks>
+            </LinksWrapper>
+            <ProfContent>
+              <Switch>
+                <Route path="/profile/mybooks" component={MyBooks} />
+                <Route path="/profile/favorites" component={Favorites} />
+              </Switch>
+            </ProfContent>
+          </ProfContentWrapper>
+        </ProfileWrapper>
+      ) : (
+        <h1 style={{ textAlign: 'center' }}>
+            Loading...
+        </h1>
+      )}
+    </>
   );
 };
 
