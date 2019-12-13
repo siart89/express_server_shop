@@ -69,11 +69,5 @@ bookInfo(app);
 favorites(app);
 // Comments
 comments(app);
-
 // Book rating
 bookRating(app);
-
-
-// app.use('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../static/index.html'));
-// });
