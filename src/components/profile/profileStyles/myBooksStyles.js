@@ -79,14 +79,15 @@ const SubmitButton = styled.button`
   outline:none;
   border: none;
   cursor:pointer;
-  border: 1px solid #595959;
-  box-shadow: 1px 2px 2px #000;
+  border: 1px solid #fff;
+  box-shadow: 1px 2px 2px #b5b5b5;
   width: 60%;
   border-radius: 3px;
   justify-self: left;
   font-size: 14px;
   font-weight: bold;
-  color: #2e2e2e;
+  color: #fff;
+  background-color: #42cee2;
 `;
 
 // ** BOOKLIST STYLES
