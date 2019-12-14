@@ -12,6 +12,7 @@ import ProfileInfo from '../profile/profileElements/ProfileInfo';
 import MyBooks from '../profile/profileElements/myBooks/MyBooks';
 import Favorites from '../favorites/Favorites';
 import setUrl from '../../store/actions/setUrl';
+import toLocalStorage from '../../store/actions/toLocalStorage';
 
 
 const MainProfile = () => {
@@ -30,8 +31,7 @@ const MainProfile = () => {
       if (resp.ok) {
         const result = await resp.json();
         if (result.token) {
-          localStorage.setItem('token', JSON.stringify(result.token));
-          localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+          dispatch(toLocalStorage(result.token, result.refreshToken));
         }
         dispatch(setUrl(result.avatar));
         setIsAuth(true);

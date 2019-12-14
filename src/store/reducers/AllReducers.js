@@ -4,6 +4,7 @@ import PopUpWindow from './PopUpWindow';
 import Mode from './Mode';
 import Category from './Category';
 import ShopCart from './ShopCart';
+import SetNUpdateToken from './SetNUpdateToken';
 
 export default combineReducers({
   currentUser: CurrentUser,
@@ -11,4 +12,5 @@ export default combineReducers({
   mode: Mode,
   category: Category,
   cart: ShopCart,
+  toke: SetNUpdateToken,
 });

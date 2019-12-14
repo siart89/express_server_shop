@@ -7,6 +7,7 @@ import {
   InputLabel,
 } from '../profileStyles/styles';
 import setUrl from '../../../store/actions/setUrl';
+import toLocalStorage from '../../../store/actions/toLocalStorage';
 
 
 const Avatar = ({ name }) => {
@@ -26,8 +27,7 @@ const Avatar = ({ name }) => {
     });
     const result = await resp.json();
     if (result.token) {
-      localStorage.setItem('token', JSON.stringify(result.token));
-      localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+      dispatch(toLocalStorage(result.token, result.refreshToken));
     }
     dispatch(setUrl(result.url));
   };
