@@ -6,12 +6,6 @@ import { makeNewSession } from './authentication';
 
 const secretKey = fs.readFileSync('./server/secret/secret.key', 'utf8');
 
-const chekInSessions = async (id, token) => {
-  const isExist = await db.one(`SELECT (user_id, refresh_token) FROM sessions
-   WHERE user_id = $1 AND refresh_token = $2;`, [id, token]);
-   if (isExist) return true;
-   return false;
-}
 
 const checkToken = async (req, res, next) => {
   if (typeof req.headers.authorization !== 'undefined') {
@@ -19,17 +13,20 @@ const checkToken = async (req, res, next) => {
     const refreshToken = req.headers.authorization.split(' ')[2];
     jwt.verify(token, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
       if (err) {
-        
         jwt.verify(refreshToken, secretKey, { algorithm: 'HS256' }, async (err, encoded) => {
           const { ip, id, name, os } = encoded;
-          if (await chekInSessions(id, refreshToken)) {
-            req.id = encoded.id;
-            if (ip === req.ip && os === req.useragent.os) {
-              makeNewSession(req, next, name, id)
-            }
-          } else {
-            res.sendStatus(403);
-          }     
+          db.one(`SELECT (user_id, refresh_token) FROM sessions
+          WHERE user_id = $1 AND refresh_token = $2;`, [id, refreshToken])
+            .then((data) => {
+              req.id = encoded.id;
+              if (ip === req.ip && os === req.useragent.os) {
+                 makeNewSession(req, next, name, id)
+              }
+            })
+            .catch((error) => {
+              throw new Error(error)
+            })
+            if (err) res.sendStatus(403)
         })
       } else {
         req.id = encoded.id;

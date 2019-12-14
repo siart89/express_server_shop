@@ -8,7 +8,16 @@ export default (app) => {
 
     db.none('DELETE FROM favorites WHERE user_id = $1 AND book_id = $2', [id, bookId])
       .then(() => {
-        res.status(200).json({ isFavor: true });
+        if (res.userInfo) {
+          res.status(200).json({
+            token: req.userInfo.token,
+            refreshToken: req.userInfo.refreshToken,
+            isFavor: true
+          });
+        } else {
+          res.status(200).json({ isFavor: true });
+        }
+
       })
       .catch(() => {
         res.sendStatus(500);
@@ -21,10 +30,27 @@ export default (app) => {
             INNER JOIN books ON favorites.book_id = books.id
             WHERE favorites.user_id = $1 AND favorites.book_id=$2;`, [id, bookId])
       .then(() => {
-        res.status(200).json({ isFavor: true });
+        if (res.userInfo) {
+          res.status(200).json({
+            token: req.userInfo.token,
+            refreshToken: req.userInfo.refreshToken,
+            isFavor: true
+          });
+        } else {
+          res.status(200).json({ isFavor: true });
+        }
       })
       .catch(() => {
-        res.json({ isFavor: false });
+        if (res.userInfo) {
+          res.status(200).json({
+            token: req.userInfo.token,
+            refreshToken: req.userInfo.refreshToken,
+            isFavor: false
+          });
+        } else {
+          res.json({ isFavor: false });
+        }
+
       });
   });
 
@@ -41,7 +67,16 @@ export default (app) => {
   app.use('/favorites/user:userId/book:bookId', checkToken, checkInDb, (req, res) => {
     db.none('INSERT INTO favorites (book_id, user_id) VALUES ($1, $2);', [req.params.bookId, req.params.userId])
       .then(() => {
-        res.sendStatus(200);
+        if (res.userInfo) {
+          res.status(200).json({
+            token: req.userInfo.token,
+            refreshToken: req.userInfo.refreshToken,
+            isFavor: false
+          });
+        } else {
+          res.sendStatus(200);
+        }
+
       })
       .catch(() => res.sendStatus(500));
   });

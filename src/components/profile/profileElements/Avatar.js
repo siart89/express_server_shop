@@ -20,12 +20,15 @@ const Avatar = ({ name }) => {
     const resp = await fetch('/profile/avatar', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
       },
       body: data,
     });
     const result = await resp.json();
-
+    if (result.token) {
+      localStorage.setItem('token', JSON.stringify(result.token));
+      localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+    }
     dispatch(setUrl(result.url));
   };
 

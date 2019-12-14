@@ -25,8 +25,17 @@ export default (app, upload) => {
     const mypath = `http://localhost:3000/resources/${req.file.filename}`;
     res.status(200).json({ path: mypath });
   });
-
+ 
   app.post('/api/user/books', checkToken, jsonParser, setBooksInfo, (req, res) => {
-    res.sendStatus(200);
+    if (res.userInfo) {
+      res.status(200).json({
+        token: req.userInfo.token,
+        refreshToken: req.userInfo.refreshToken,
+        avatar,
+      });
+    } else {
+      res.sendStatus(200);
+    }
+    
   });
 };

@@ -17,6 +17,15 @@ const setUrl = (req, res, next) => {
 
 export default (app, upload) => {
   app.post('/profile/avatar', upload.single('avatar'), checkToken, setUrl, (req, res) => {
-    res.status(200).json({ url: req.avaterPath });
+    if (req.userInfo) {
+      res.status(200).json({
+        token: req.userInfo.token,
+        refreshToken: req.userInfo.refreshToken,
+        url: req.avaterPath,
+      });
+    } else {
+      res.status(200).json({ url: req.avaterPath });
+    }
+   
   });
 };

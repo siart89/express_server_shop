@@ -1,5 +1,4 @@
 import fs from 'fs';
-import uniqid from 'uniqid';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import db from './db';

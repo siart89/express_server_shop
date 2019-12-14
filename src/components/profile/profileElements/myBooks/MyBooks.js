@@ -34,7 +34,6 @@ const MyBooks = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
         },
       });
       if (resp.ok) {
@@ -61,7 +60,7 @@ const MyBooks = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
       },
       body: JSON.stringify(bookInfo),
     });
@@ -72,6 +71,13 @@ const MyBooks = () => {
       setDescription('');
       setUrl('');
       setForUpdate(!forUpdate);
+
+      const result = await resp.json()
+      console.log(result)
+      if (result.token) {
+        localStorage.setItem('token', JSON.stringify(result.token));
+        localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
+      }
     }
   };
   // SEND the book cover and get back path right away
