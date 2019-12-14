@@ -6,7 +6,7 @@ import { Title } from '../profile/profileStyles/styles';
 
 const Favorites = () => {
   const [favor, setFavorites] = useState([]);
-  const { id } = useSelector((state) => state.authUser);
+  const { id } = useSelector((state) => state.currentUser);
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(`profile/user/${id}/favorites`);

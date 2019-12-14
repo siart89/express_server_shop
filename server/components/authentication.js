@@ -16,8 +16,10 @@ const makeNewSession = async (req, next, name, id) => {
     ip: req.ip,
     os: req.useragent.os,
   },
-    secretKey,
-    { algorithm: 'HS256', expiresIn: '24h' }, (err, token) => req.refreshToken = token)
+  secretKey,
+  { algorithm: 'HS256', expiresIn: '24h' }, (err, token) => {
+    req.refreshToken = token;
+  });
 
   // clear user session , expected 1 user session for each
   db.none('DELETE FROM sessions WHERE user_id = $1', [id])
@@ -25,30 +27,30 @@ const makeNewSession = async (req, next, name, id) => {
       //     // Create user session
       db.none(`INSERT INTO sessions (user_id, ip, os, user_agent, refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [id, req.ip, req.useragent.os, req.useragent.source,
-          req.refreshToken, expiredTime, new Date(createdTime), name])
+      [id, req.ip, req.useragent.os, req.useragent.source,
+        req.refreshToken, expiredTime, new Date(createdTime), name])
         .then(() => {
           jwt.sign({
             id,
             ip: req.ip,
             os: req.useragent.os,
           },
-            secretKey,
-            { algorithm: 'HS256', expiresIn: '3s' }, (err, token) => {
-              if (err) {
-                console.log(err)
-              }
-              req.userInfo = {
-                token,
-                name,
-                refreshToken: req.refreshToken,
-                id,
-              };
-              next();
-            });
+          secretKey,
+          { algorithm: 'HS256', expiresIn: '3s' }, (err, token) => {
+            if (err) {
+              console.log(err);
+            }
+            req.userInfo = {
+              token,
+              name,
+              refreshToken: req.refreshToken,
+              id,
+            };
+            next();
+          });
         });
     })
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err));
 };
 
 const authenticationUser = (req, res, next) => {

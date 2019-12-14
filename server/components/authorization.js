@@ -13,21 +13,26 @@ const checkToken = async (req, res, next) => {
     const refreshToken = req.headers.authorization.split(' ')[2];
     jwt.verify(token, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
       if (err) {
-        jwt.verify(refreshToken, secretKey, { algorithm: 'HS256' }, async (err, encoded) => {
-          const { ip, id, name, os } = encoded;
+        jwt.verify(refreshToken, secretKey, { algorithm: 'HS256' }, async (erro, encod) => {
+          const {
+            ip,
+            id,
+            name,
+            os,
+          } = encod;
           db.one(`SELECT (user_id, refresh_token) FROM sessions
           WHERE user_id = $1 AND refresh_token = $2;`, [id, refreshToken])
-            .then((data) => {
-              req.id = encoded.id;
+            .then(() => {
+              req.id = encod.id;
               if (ip === req.ip && os === req.useragent.os) {
-                 makeNewSession(req, next, name, id)
+                makeNewSession(req, next, name, id);
               }
             })
             .catch((error) => {
-              throw new Error(error)
-            })
-            if (err) res.sendStatus(403)
-        })
+              throw new Error(error);
+            });
+          if (erro) res.sendStatus(403);
+        });
       } else {
         req.id = encoded.id;
         next();
@@ -52,9 +57,10 @@ const authorization = (app) => {
           res.status(200).json({ avatar });
         }
       })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      });
   });
 };
 

@@ -13,19 +13,10 @@ const AddToFavorBtn = ({ bookId }) => {
 
   useEffect(() => {
     const isInFavorite = async () => {
-      const resp = await fetch(`/profile/user${id}/book${bookId}/favorites`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
-        },
-      });
+      const resp = await fetch(`/profile/user${id}/book${bookId}/favorites`);
       if (resp.ok) {
         const result = await resp.json();
-        if (result.isFavor) {
-          setIsAdd(true);
-        } else {
-          setIsAdd(false);
-        }
+        setIsAdd(result.isFavor);
       }
     };
     if (id) {
@@ -34,27 +25,15 @@ const AddToFavorBtn = ({ bookId }) => {
   }, [id, bookId]);
 
   const handleRemoveFromFavorites = async () => {
-    const resp = await fetch(`/profile/user${id}/book${bookId}/favorites/remove`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
-      },
-    });
+    const resp = await fetch(`/profile/user${id}/book${bookId}/favorites/remove`);
     if (resp.ok) {
       const result = await resp.json();
-      if (result.isFavor) {
-        setIsAdd(false);
-      }
+      setIsAdd(result.isFavor);
     }
   };
 
   const handleSetInFavorites = async () => {
-    const resp = await fetch(`/favorites/user${id}/book${bookId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))} ${JSON.parse(localStorage.getItem('refreshToken'))}`,
-      },
-    });
+    const resp = await fetch(`/favorites/user${id}/book${bookId}`);
     if (resp.ok) {
       setIsAdd(true);
     }

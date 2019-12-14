@@ -72,8 +72,7 @@ const MyBooks = () => {
       setUrl('');
       setForUpdate(!forUpdate);
 
-      const result = await resp.json()
-      console.log(result)
+      const result = await resp.json();
       if (result.token) {
         localStorage.setItem('token', JSON.stringify(result.token));
         localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
@@ -82,18 +81,20 @@ const MyBooks = () => {
   };
   // SEND the book cover and get back path right away
   const handleFetchCover = async (e) => {
-    const formData = new FormData();
-    formData.append('cover', e.target.files[0]);
-    const resp = await fetch('/api/book/cover', {
-      method: 'POST',
-      body: formData,
-    });
-    if (resp.ok) {
-      const result = await resp.json();
-      setUrl(result.path);
-      setShowMessage(false);
-    } else {
-      setShowMessage(true);
+    if (e.target.files[0]) {
+      const formData = new FormData();
+      formData.append('cover', e.target.files[0]);
+      const resp = await fetch('/api/book/cover', {
+        method: 'POST',
+        body: formData,
+      });
+      if (resp.ok) {
+        const result = await resp.json();
+        setUrl(result.path);
+        setShowMessage(false);
+      } else {
+        setShowMessage(true);
+      }
     }
   };
 

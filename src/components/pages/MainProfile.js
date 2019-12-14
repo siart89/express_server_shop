@@ -29,7 +29,6 @@ const MainProfile = () => {
       });
       if (resp.ok) {
         const result = await resp.json();
-        console.log(result)
         if (result.token) {
           localStorage.setItem('token', JSON.stringify(result.token));
           localStorage.setItem('refreshToken', JSON.stringify(result.refreshToken));
