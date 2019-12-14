@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-icons-kit';
 import { bookmarkO } from 'react-icons-kit/fa/bookmarkO';
@@ -9,7 +9,6 @@ import { FavoriteIcon } from './styles';
 const AddToFavorBtn = ({ bookId }) => {
   const [isAdd, setIsAdd] = useState(false);
   const { id } = useSelector((state) => state.currentUser);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const isInFavorite = async () => {

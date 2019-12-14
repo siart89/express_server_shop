@@ -44,4 +44,14 @@ export default (app) => {
       })
       .catch(() => res.sendStatus(500));
   });
+
+  app.use('/profile/user/:id/favorites', async (req, res) => {
+    try {
+      const data = await db.any(`SELECT * FROM (SELECT * FROM favorites WHERE user_id = $1) AS favor
+      INNER JOIN books ON favor.book_id = books.id;`, [req.params.id]);
+      res.json(data);
+    } catch (err) {
+      res.json({});
+    }
+  });
 };
