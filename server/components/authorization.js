@@ -2,28 +2,24 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import db from './db';
 import { makeNewSession } from './authentication';
+import { resolve } from 'dns';
 
 const secretKey = fs.readFileSync('./server/secret/secret.key', 'utf8');
 
 const checkToken = async (req, res, next) => {
   if (typeof req.headers.authorization !== 'undefined') {
+    let info = [];
     const token = req.headers.authorization.split(' ')[1];
     const refreshToken = req.headers.authorization.split(' ')[2];
     jwt.verify(token, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
       if (err) {
-        db.one('SELECT * FROM sessions WHERE refresh_token = $1', [refreshToken])
-          .then((data) => {
-            if (data.expired_at <= (Math.floor(Date.now() / 1000))) {
-              throw new Error('Refresh token was expire');
-            }
-            console.log(data);
-            makeNewSession(req, data, next, data.user_id);
-            next();
-          })
-          .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log(error);
-          });
+        jwt.verify(refreshToken, secretKey, { algorithm: 'HS256' }, (err, encoded) => {
+          const { ip, id, name, os } = encoded;
+          req.id = encoded.id;
+          if (ip === req.ip && os === req.useragent.os) {
+            makeNewSession(req, next, name, id)
+          }
+        })
       } else {
         req.id = encoded.id;
         next();
@@ -47,7 +43,10 @@ const authorization = (app) => {
         } else {
           res.status(200).json({ avatar });
         }
-      });
+      })
+      .catch(err => {
+        console.log(err)
+      })
   });
 };
 
