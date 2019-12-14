@@ -19,7 +19,7 @@ const ElemOfFavorites = ({
 
   return (
     <FavoriteGridBox>
-      <FavoriteCover url={url} />
+      <FavoriteCover url={url} to={`/book/${bookId}`} />
       <Title>
         {title}
       </Title>
