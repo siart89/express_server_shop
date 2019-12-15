@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const ProfileWrapper = styled.section`
@@ -86,6 +86,10 @@ const ProfLinks = styled(Link)`
   font-weight: 500;
   margin-right: 78px;
   color: #A0A4A5;
+  ${(props) => props.isactive && css`
+    color:#42CEE2;
+    border-bottom: 2px solid #42CEE2; 
+  `};
 `;
 
 const ProfContent = styled.div`

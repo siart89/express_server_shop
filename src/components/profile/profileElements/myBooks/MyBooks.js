@@ -28,6 +28,7 @@ const MyBooks = () => {
   const authUser = useSelector((state) => state.currentUser);
   const categories = useSelector((state) => state.category);
   const dispatch = useDispatch();
+
   // Get current user book list from db
   useEffect(() => {
     const fetchBookList = async () => {

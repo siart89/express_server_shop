@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   ProfileWrapper,
@@ -18,6 +18,8 @@ import toLocalStorage from '../../store/actions/toLocalStorage';
 const MainProfile = () => {
   const [isAuth, setIsAuth] = useState(false);
   const dispatch = useDispatch();
+  const isBooks = useRouteMatch('/profile/mybooks');
+  const isFavor = useRouteMatch('/profile/favorites');
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -49,8 +51,18 @@ const MainProfile = () => {
           <ProfileInfo />
           <ProfContentWrapper>
             <LinksWrapper>
-              <ProfLinks to="/profile/mybooks">Мои книги</ProfLinks>
-              <ProfLinks to="/profile/favorites">Избранное</ProfLinks>
+              <ProfLinks
+                to="/profile/mybooks"
+                isactive={isBooks}
+              >
+                Мои книги
+              </ProfLinks>
+              <ProfLinks
+                to="/profile/favorites"
+                isactive={isFavor}
+              >
+                Избранное
+              </ProfLinks>
             </LinksWrapper>
             <ProfContent>
               <Switch>
