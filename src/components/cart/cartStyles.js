@@ -115,6 +115,23 @@ const TitleRow = styled(Row)`
     background:none;
     margin: 0;
 `;
+
+const CartButton = styled(Link)`
+  text-decoration: none;
+  width: 200px;
+  align-self: center;
+  font-size: 14px;
+  line-height: 56px;
+  display: inline-block;
+  background-color: #181616;
+  color: #FFFFFF;
+  text-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  margin: 25px 0;
+`;
 export {
   BackgroundWrapper,
   CartWrapper,
@@ -131,4 +148,5 @@ export {
   WhiteBGWrapper,
   ResultWrapper,
   TitleRow,
+  CartButton,
 };
