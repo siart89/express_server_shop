@@ -28,4 +28,35 @@ export default (app) => {
         console.log(err);
       });
   });
+  // Set that new comment was read
+  app.use('/profile/notifications/check/book:bookId', (req, res) => {
+    const { bookId } = req.params;
+    db.none(`UPDATE comments SET is_read = true
+      WHERE book_id = $1;`, [bookId])
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  // Geting a comments wich have status is_read = false
+  app.use('/profile/notifications/user:id', (req, res) => {
+    const { id } = req.params;
+    db.any(`SELECT id, title, count(*) FROM 
+      (SELECT book_id AS id, title, text FROM comments
+      INNER JOIN books ON
+      books.id = comments.book_id
+      WHERE books.user_id = $1 AND comments.is_read = false) AS note
+      GROUP BY id, title
+      ;`, [id])
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  });
 };

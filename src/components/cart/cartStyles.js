@@ -68,6 +68,7 @@ const CartRowTitle = styled(Link)`
   font-size: 15px;
   line-height: 20px;
   font-weight: 500;
+  width: max-content;
 `;
 const CartMainText = styled.span`
   font-size: 12px;

@@ -13,6 +13,7 @@ import MyBooks from '../profile/profileElements/myBooks/MyBooks';
 import Favorites from '../favorites/Favorites';
 import setUrl from '../../store/actions/setUrl';
 import toLocalStorage from '../../store/actions/toLocalStorage';
+import ProfileBoard from '../profile/mainBoard/ProfileBoard';
 
 
 const MainProfile = () => {
@@ -68,6 +69,7 @@ const MainProfile = () => {
               <Switch>
                 <Route path="/profile/mybooks" component={MyBooks} />
                 <Route path="/profile/favorites" component={Favorites} />
+                <Route path="/" component={ProfileBoard} />
               </Switch>
             </ProfContent>
           </ProfContentWrapper>
