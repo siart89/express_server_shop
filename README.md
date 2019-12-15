@@ -36,13 +36,14 @@
   
   | user_agent    | text
   
-  | refresh_token | character varying(40)
+  | refresh_token | text
   
   | expired_at    | timestamp with time zone
   
   | created_at    | timestamp with time zone
   
   | name          | text
+
 ]
 
 ## books :
@@ -63,6 +64,10 @@
   | price         | money NOT NULL
   
   | created_at    | timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+
+  |rating         | real
+
+  |category       | text
   
 ]
 
@@ -85,7 +90,7 @@
 
 id | SERIAL PRIMARY KEY
 
-book_id | REFERENCES books (id) ON DELETE CASCADE
+book_id | bigint REFERENCES books (id) ON DELETE CASCADE
 
 text | text NOT NULL
 
@@ -95,4 +100,12 @@ is_read | boolean DEFAULT false
 
 author_name | text
 
-stars | smallint
+rating | smallint
+
+## favorites :
+
+book_id | bigint REFERENCES books (id) ON DELETE CASCADE
+
+user_id | bigint REFERENCES users (id) ON DELETE CASCADE
+
+id      | SERIAL PRIMARY KEY

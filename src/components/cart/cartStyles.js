@@ -106,6 +106,15 @@ const WhiteBGWrapper = styled.section`
 const ResultWrapper = styled(CartWrapper)`
   align-items: flex-end;
 `;
+
+// Cart Title Row styles
+
+const TitleRow = styled(Row)`
+    height: auto;
+    box-shadow:none;
+    background:none;
+    margin: 0;
+`;
 export {
   BackgroundWrapper,
   CartWrapper,
@@ -121,4 +130,5 @@ export {
   RowInfo,
   WhiteBGWrapper,
   ResultWrapper,
+  TitleRow,
 };

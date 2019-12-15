@@ -9,6 +9,7 @@ import {
 import CartRow from '../cart/CartRow';
 import CartResult from '../cart/CartResult';
 import formatPrice from '../actions/formatPrice';
+import CartTitleRow from '../cart/CartTitleRow';
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
@@ -37,6 +38,7 @@ const Cart = () => {
           >
             Очистить корзину
           </CartSubTitle>
+          <CartTitleRow />
           {cart.map((item) => (
             <CartRow
               key={item.bookId}
