@@ -99,6 +99,15 @@ const ProfContent = styled.div`
   grid-column-gap: 50px;
   grid-template-columns: 1fr minmax(300px, auto);
 `;
+
+const ProfTitle = styled.span`
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-right: 105px;
+  color: #E9776C;
+  margin-left: auto;
+`;
 export {
   ProfileWrapper,
   InfoWrapper,
@@ -111,4 +120,5 @@ export {
   ProfContentWrapper,
   LinksWrapper,
   ProfContent,
+  ProfTitle,
 };

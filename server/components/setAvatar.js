@@ -26,6 +26,5 @@ export default (app, upload) => {
     } else {
       res.status(200).json({ url: req.avaterPath });
     }
-   
   });
 };

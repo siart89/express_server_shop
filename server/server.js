@@ -13,6 +13,7 @@ import bookInfo from './components/bookInfo';
 import favorites from './components/favorites';
 import comments from './components/comments';
 import bookRating from './components/bookRating';
+import newProd from './components/getNewProd';
 
 
 // create server
@@ -64,7 +65,9 @@ userBookList(app);
 bookInfo(app);
 // SET FAVORITES
 favorites(app);
+// GEtting new Products
+newProd(app);
 // Comments
 comments(app);
-// Book rating
+// Book rating !!! must be Last module
 bookRating(app);

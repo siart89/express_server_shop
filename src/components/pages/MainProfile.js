@@ -7,6 +7,7 @@ import {
   ProfContentWrapper,
   LinksWrapper,
   ProfContent,
+  ProfTitle,
 } from '../profile/profileStyles/styles';
 import ProfileInfo from '../profile/profileElements/ProfileInfo';
 import MyBooks from '../profile/profileElements/myBooks/MyBooks';
@@ -64,6 +65,8 @@ const MainProfile = () => {
               >
                 Избранное
               </ProfLinks>
+              {(!isBooks && !isFavor) && <ProfTitle> Новинки</ProfTitle>}
+              { isBooks && <ProfTitle> Мои книги</ProfTitle>}
             </LinksWrapper>
             <ProfContent>
               <Switch>
