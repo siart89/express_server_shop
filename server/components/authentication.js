@@ -17,11 +17,11 @@ const makeNewSession = async (req, next, name, id) => {
     os: req.useragent.os,
   },
   secretKey,
-  { algorithm: 'HS256', expiresIn: '24h' }, (err, token) => {
+  { algorithm: 'HS256', expiresIn: '72h' }, (err, token) => {
     req.refreshToken = token;
   });
 
-  // clear user session , expected 1 user session for each
+  // clear user session , expect 1 user session for each
   db.none('DELETE FROM sessions WHERE user_id = $1', [id])
     .then(() => {
       //     // Create user session
@@ -36,7 +36,7 @@ const makeNewSession = async (req, next, name, id) => {
             os: req.useragent.os,
           },
           secretKey,
-          { algorithm: 'HS256', expiresIn: '3s' }, (err, token) => {
+          { algorithm: 'HS256', expiresIn: '4h' }, (err, token) => {
             if (err) {
               console.log(err);
             }

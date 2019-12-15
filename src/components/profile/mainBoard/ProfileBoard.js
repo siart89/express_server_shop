@@ -26,7 +26,6 @@ const ProfileBoard = () => {
       const resp = await fetch('/product/news');
       if (resp.ok) {
         const result = await resp.json();
-        console.log(result);
         setNewProd(result);
       }
     };

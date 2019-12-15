@@ -19,6 +19,8 @@ export default (state = initState, action) => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userName');
+    localStorage.removeItem('id');
+    localStorage.removeItem('cart');
     return { name: false, isLogIn: false };
   default:
     return state;

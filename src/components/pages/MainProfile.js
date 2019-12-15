@@ -15,6 +15,7 @@ import Favorites from '../favorites/Favorites';
 import setUrl from '../../store/actions/setUrl';
 import toLocalStorage from '../../store/actions/toLocalStorage';
 import ProfileBoard from '../profile/mainBoard/ProfileBoard';
+import logOut from '../../store/actions/logOut';
 
 
 const MainProfile = () => {
@@ -40,7 +41,8 @@ const MainProfile = () => {
         dispatch(setUrl(result.avatar));
         setIsAuth(true);
       } else {
-        setIsAuth(false);
+        dispatch(logOut());
+        dispatch({ type: 'CLEAR_CART' });
       }
     };
     verifyUser();
@@ -66,7 +68,7 @@ const MainProfile = () => {
                 Избранное
               </ProfLinks>
               {(!isBooks && !isFavor) && <ProfTitle> Новинки</ProfTitle>}
-              { isBooks && <ProfTitle> Мои книги</ProfTitle>}
+              {isBooks && <ProfTitle> Мои книги</ProfTitle>}
             </LinksWrapper>
             <ProfContent>
               <Switch>

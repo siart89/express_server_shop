@@ -138,6 +138,7 @@ const FullCart = styled.span`
 const FavorIconBox = styled.span`
  color:#000;
  margin-right:15px;
+ cursor: pointer;
 `;
 export {
   // HeaderTop
