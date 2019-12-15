@@ -26,7 +26,7 @@ const CoverInp = styled.label`
   justify-content:center;
   width:100%;
   min-height:100%;
-  border: 1px dashed #000;
+  border: 1px dashed #d1d1d1;
   background-image: url(${(props) => props.url});
   background-size: cover;
   background-position: center center;
@@ -42,7 +42,7 @@ const CoverInp = styled.label`
 `;
 const Select = styled.select`
  grid-area: ${(props) => props.areaName};
- border:1px solid #595959;
+ border:1px solid #d1d1d1;
  font-size: 12px;
  font-style: italic;
  line-height: 1.25;
@@ -52,7 +52,7 @@ const Select = styled.select`
 
 const TextInp = styled.input`
  grid-area: ${(props) => props.areaName};
- border:1px solid #595959;
+ border:1px solid #d1d1d1;
  font-size: 12px;
  font-style: italic;
  line-height: 1.25;
@@ -67,7 +67,7 @@ const PriceInp = styled(TextInp)`
 const TextArea = styled.textarea`
  grid-area: description;
  resize: none;
- border:1px solid #595959;
+ border:1px solid #d1d1d1;
  border-radius:3px;
  font-size: 12px;
  font-style: italic;
