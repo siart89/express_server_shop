@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const FilterWrapper = styled.div`
   width:100%;
   display:grid;
-  grid-template-rows: 22px auto;
+  grid-template-rows: 22px auto 1fr;
   grid-template-columns: 1fr;
   & h1{
     font-family: Roboto;

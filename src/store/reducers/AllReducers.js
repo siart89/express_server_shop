@@ -5,6 +5,7 @@ import Mode from './Mode';
 import Category from './Category';
 import ShopCart from './ShopCart';
 import SetNUpdateToken from './SetNUpdateToken';
+import ProductListInfo from './ProductListInfo';
 
 export default combineReducers({
   currentUser: CurrentUser,
@@ -13,4 +14,5 @@ export default combineReducers({
   category: Category,
   cart: ShopCart,
   toke: SetNUpdateToken,
+  products: ProductListInfo,
 });

@@ -36,7 +36,7 @@ const Product = ({
       </ProdPrice>
     </ProductCont>
   );
-}
+};
 
 Product.propTypes = {
   url: PropTypes.string.isRequired,

@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { BooksWrapper } from './productListStyles';
 import ProductListTop from './top/ProductListTop';
 import Product from './mainProdList/Product';
 import { ProdGridBox } from './mainProdList/styles';
+import setLength from '../../../store/actions/setLength';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState(false);
+  const dispatch = useDispatch();
+  const { pageNum, maxOnPage } = useSelector((state) => state.products);
+
   useEffect(() => {
     const fetchProductList = async () => {
-      const resp = await fetch('/products/all');
+      const resp = await fetch(`/products/all?pagenum=${pageNum}&limit=${maxOnPage}`);
       if (resp.ok) {
         const result = await resp.json();
-        setProducts(result);
+        setProducts(result.product);
+        dispatch(setLength(result.product.length, result.count));
       } else {
         setMessage(true);
       }
     };
     fetchProductList();
-  }, []);
+  }, [dispatch, maxOnPage, pageNum]);
   return (
     <BooksWrapper>
       <ProductListTop />
