@@ -47,7 +47,7 @@ const ProfileBoard = () => {
           <EmptyTitle>Новых отзывов нет</EmptyTitle>
         )}
       </FlexColumn>
-      <MyBookList list={newProd} />
+      {newProd.length > 0 && <MyBookList list={newProd} /> }
     </>
   );
 };
