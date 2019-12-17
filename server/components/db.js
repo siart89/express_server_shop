@@ -1,6 +1,4 @@
-const pgp = require('pg-promise')({
-  promiseLib: Promise,
-});
+import pgp from 'pg-promise';
 
 const cn = {
   host: 'localhost',
@@ -9,6 +7,6 @@ const cn = {
   user: 'postgres',
   password: 'drevnieslezi2012',
 };
-const db = pgp(cn);
+const db = pgp()(cn);
 
-module.exports = db;
+export default db;

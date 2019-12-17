@@ -74,7 +74,7 @@ favorites(app);
 newProd(app);
 // Comments
 comments(app);
-app.use(express.static(__dirname + '/public/index.html'))
+app.use('*', express.static(__dirname + '/public/index.html'))
 // Book rating !!! must be Last module
 bookRating(app);
 

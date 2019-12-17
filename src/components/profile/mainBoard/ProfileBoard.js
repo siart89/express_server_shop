@@ -47,11 +47,7 @@ const ProfileBoard = () => {
           <EmptyTitle>Новых отзывов нет</EmptyTitle>
         )}
       </FlexColumn>
-<<<<<<< HEAD
-      {newProd.length > 0 && <MyBookList list={newProd} /> }
-=======
       {newProd.length > 0 && <MyBookList list={newProd} />}
->>>>>>> 0730dd5af5025e63f1888f27fbc7fc096dab32a2
     </>
   );
 };
