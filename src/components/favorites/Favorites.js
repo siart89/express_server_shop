@@ -12,6 +12,7 @@ const Favorites = () => {
     const fetchData = async () => {
       const resp = await fetch(`/profile/user/${id}/favorites`);
       if (resp.ok) {
+
         const result = await resp.json();
         setFavorites(result);
       }
@@ -32,7 +33,7 @@ const Favorites = () => {
                 key={item.id}
                 url={item.cover}
                 title={item.title}
-                id={+item.user_id}
+                id={id}
                 bookId={+item.book_id}
                 reloadOnRemove={handleReloadOnRemove}
               />
