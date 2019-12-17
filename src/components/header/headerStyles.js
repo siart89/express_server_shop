@@ -32,7 +32,8 @@ const HeaderTopInner = styled.div`
   width: 100%;
   max-width: 1560px;
 `;
-const HeaderLogo = styled.div`
+const HeaderLogo = styled(Link)`
+  text-decoration: none;
   display:flex;
   flex:1 1;
   align-items:center;

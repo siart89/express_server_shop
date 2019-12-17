@@ -17,7 +17,7 @@ const HeaderTop = () => {
   return (
     <HeaderTopWrapper>
       <HeaderTopInner>
-        <HeaderLogo>
+        <HeaderLogo to="/">
           MyBookcase
         </HeaderLogo>
         <HeaderRight>
