@@ -16,7 +16,7 @@ const ProductCont = styled.div`
   grid-template-rows: 250px 50px 25px 35px;
   min-width: 210px;
   grid-row-gap: 5px;
-  transition: 0.2s ease-in;
+  transition: grid-row-gap 0.15s ease-in;
   ${(props) => props.hover && css`
   grid-row-gap: 0;
   `}
@@ -26,8 +26,10 @@ const CoverBox = styled.div`
   display:flex;
   justify-content:center;
   align-items: center;
+  max-height:100%;
+  transition: max-height 0.15s ease-in;
   ${(props) => props.hover && css`
-    height: 90%;
+    max-height: 90%;
   `};
   
 `;

@@ -76,4 +76,3 @@ newProd(app);
 comments(app);
 // Book rating !!! must be Last module
 bookRating(app);
-console.log(1);
