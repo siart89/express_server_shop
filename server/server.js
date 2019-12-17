@@ -14,6 +14,7 @@ import favorites from './components/favorites';
 import comments from './components/comments';
 import bookRating from './components/bookRating';
 import newProd from './components/getNewProd';
+import getProductList from './components/getProductList';
 
 
 // create server
@@ -24,9 +25,11 @@ const port = (process.env.PORT || 8080);
 
 app.listen(port, (err) => {
   if (err) {
-    console.log('Server is not started, error : ', err);
+    // eslint-disable-next-line no-console
+    console.log('Server has not been started, error : ', err);
   } else {
-    console.log('Server is started');
+    // eslint-disable-next-line no-console
+    console.log('Server has been started');
   }
 });
 
@@ -55,6 +58,8 @@ registration(app);
 authentication(app);
 // **AUTHORIZATION--------------------
 authorization(app);
+// Get products list
+getProductList(app);
 // Add Avatar picture
 setAvatar(app, upload);
 // ADD USERS BOOK TO DB
