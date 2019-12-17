@@ -7,11 +7,9 @@ const jsonParser = bodyParser.json();
 const chekUser = async (req, res, next) => {
   try {
     await db.none('SELECT mail FROM users WHERE mail = $1', [req.body.mail]);
-    console.log('here')
     await next();
   } catch (e) {
-    console.log(e)
-    res.status(403).json({ message: 'Пользователь с такой почтой уже зарегистрирован' });
+    res.status(403).send('Пользователь с такой почтой уже зарегистрирован');
   }
 };
 

@@ -42,9 +42,11 @@ const Registration = () => {
         },
         body: JSON.stringify(user),
       });
-      const result = await resp.json();
-      if (result.message) {
+      if (resp.ok) {
         dispatch(modeLog());
+      }
+      if (resp.status === 403) {
+        setMessage('Пользователь с данной почтой уже зарегестрирован');
       } else {
         setMessage('Сбой, повторите попытку');
       }
@@ -59,7 +61,7 @@ const Registration = () => {
       <FormTitle>
         Зарегистрировать аккаунт на сайте:
       </FormTitle>
-      {message && <FormTitle>{message}</FormTitle>}
+      {message && <FormTitle style={{ color: 'red' }}>{message}</FormTitle>}
       <Form onSubmit={handleRegOnSubmit}>
         <Div>
           <Label>
