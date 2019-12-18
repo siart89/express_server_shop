@@ -1,6 +1,7 @@
 export default (state = {
   maxOnPage: 16,
   pageNum: 1,
+  sort: 'default'
 }, action) => {
   switch (action.type) {
   case 'SET_LENGTH':
@@ -14,6 +15,8 @@ export default (state = {
       ...state,
       pageNum: action.payload,
     };
+  case 'SET_SORT_TYPE':
+    return { ...state, sort: action.payload }
   default:
     return state;
   }

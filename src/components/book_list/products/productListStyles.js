@@ -48,6 +48,11 @@ const NumText = styled.span`
     font-weight: 600;
   `}
 `;
+
+const Select = styled.select`
+  border: none;
+  outline: none;
+`;
 export {
   BooksWrapper,
   TopWrapper,
@@ -55,4 +60,5 @@ export {
   ListControlsTitle,
   ControlsMainText,
   NumText,
+  Select,
 };
