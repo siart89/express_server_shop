@@ -9,7 +9,7 @@ export default (app) => {
       const data = await db.any('SELECT * FROM comments WHERE book_id = $1 ORDER BY created_at DESC', [req.params.id]);
       res.status(200).json(data);
     } catch (e) {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   });
 
@@ -21,18 +21,19 @@ export default (app) => {
     try {
       await db.none('INSERT INTO comments (book_id, text, author_name, rating) VALUES ($1, $2, $3, $4);',
         [req.body.bookId, req.body.text, req.body.author, req.body.rating]);
-      next()
+      next();
     } catch (e) {
       res.sendStatus(500);
       // eslint-disable-next-line no-console
-      console.log(err);
+      console.log(e);
     }
   });
   // Set that new comment was read
   app.use('/profile/notifications/check/book:bookId', async (req, res) => {
     const { bookId } = req.params;
     try {
-      await db.none(`UPDATE comments SET is_read = true WHERE book_id = $1;`, [bookId]);
+      await db.none(`UPDATE comments SET is_read = true
+       WHERE book_id = $1;`, [bookId]);
       res.sendStatus(200);
     } catch (e) {
       console.log(e);
@@ -52,7 +53,7 @@ export default (app) => {
       ;`, [id]);
       res.status(200).json(data);
     } catch (e) {
-      console.log(err);
+      console.log(e);
       res.sendStatus(500);
     }
   });

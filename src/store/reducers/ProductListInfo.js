@@ -3,19 +3,23 @@ export default (state = {
   pageNum: 1,
   sort: 'created_at',
   incDec: 'ASC',
+  search: '',
 }, action) => {
   switch (action.type) {
-  case 'SET_LENGTH':
+  case 'SET_INFO':
     return {
       ...state,
       length: action.payload.length,
       maxCount: action.payload.maxCount,
+      headers: action.payload.headers,
     };
   case 'SET_NUM_OF_PAGE':
     return {
       ...state,
       pageNum: action.payload,
     };
+  case 'SEARCH_TEXT':
+    return { ...state, search: action.payload };
   case 'SORT_INC_DEC':
     return { ...state, incDec: action.payload };
   case 'SET_SORT_TYPE':

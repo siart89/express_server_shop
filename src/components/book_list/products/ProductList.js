@@ -5,7 +5,7 @@ import { BooksWrapper } from './productListStyles';
 import ProductListTop from './top/ProductListTop';
 import Product from './mainProdList/Product';
 import { ProdGridBox } from './mainProdList/styles';
-import setLength from '../../../store/actions/setLength';
+import setInfoOfProd from '../../../store/actions/setInfoOfProd';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -16,21 +16,24 @@ const ProductList = () => {
     maxOnPage,
     sort,
     incDec,
+    search,
   } = useSelector((state) => state.products);
 
   useEffect(() => {
     const fetchProductList = async () => {
-      const resp = await fetch(`/products/all?pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}&inc_dec=${incDec}`);
+      const resp = await fetch(
+        `/products/all?q=${search}&pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}&inc_dec=${incDec}`,
+      );
       if (resp.ok) {
         const result = await resp.json();
         setProducts(result.product);
-        dispatch(setLength(result.product.length, result.count));
+        dispatch(setInfoOfProd(result.product.length, result.count, result.headers));
       } else {
         setMessage(true);
       }
     };
     fetchProductList();
-  }, [dispatch, maxOnPage, pageNum, sort, incDec]);
+  }, [dispatch, maxOnPage, pageNum, sort, incDec, search]);
   return (
     <BooksWrapper>
       <ProductListTop />

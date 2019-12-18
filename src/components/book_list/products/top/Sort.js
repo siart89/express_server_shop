@@ -26,7 +26,7 @@ const typesOfSort = [{
   value: 'price',
 },
 {
-  name: 'Имени',
+  name: 'Названию',
   value: 'title',
 },
 ];

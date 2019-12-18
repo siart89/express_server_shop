@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon } from 'react-icons-kit';
@@ -6,19 +6,17 @@ import { basket } from 'react-icons-kit/ikons/basket';
 import { bookmark } from 'react-icons-kit/fa/bookmark';
 import {
   HeaderMidLogo,
-  SearchInput,
   HeaderMidRight,
   FavorIconBox,
   Cart,
   HeaderMidWrapper,
-  SearchForm,
   FullCart,
 } from '../headerStyles';
 import togglePopUp from '../../../store/actions/togglePopUp';
+import SearchField from './SearchField';
 
 
 const HeaderMid = () => {
-  const [isFocus, setIsFocus] = useState(false);
   const cart = useSelector((state) => state.cart);
   const curUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
@@ -43,15 +41,7 @@ const HeaderMid = () => {
         <span>Take your book from</span>
         <span>MyBookcase</span>
       </HeaderMidLogo>
-      <SearchForm>
-        <SearchInput
-          isFocus={isFocus}
-          type="text"
-          placeholder="Поиск"
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-        />
-      </SearchForm>
+      <SearchField />
       <HeaderMidRight>
         {favorIcon}
         <Cart to="/cart">
