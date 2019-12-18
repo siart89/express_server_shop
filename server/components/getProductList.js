@@ -13,9 +13,10 @@ export default (app) => {
         limit: req.query.limit,
         offset,
         sort: req.query.sort,
-      }
+        inc_dec: req.query.inc_dec,
+      };
       const product = await db.any(`SELECT * FROM books 
-        ORDER BY $[sort:name] DESC
+        ORDER BY $[sort:name] ${values.inc_dec}
         LIMIT $[limit] OFFSET $[offset]`, values);
       const { count } = await db.one('SELECT count(*) FROM books');
       const data = {

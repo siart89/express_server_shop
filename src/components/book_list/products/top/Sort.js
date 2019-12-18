@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { angleDoubleUp } from 'react-icons-kit/fa/angleDoubleUp';
+import { angleDoubleDown } from 'react-icons-kit/fa/angleDoubleDown';
+import { Icon } from 'react-icons-kit';
 import {
   ListControls,
   ListControlsTitle,
@@ -7,6 +10,8 @@ import {
   Select,
 } from '../productListStyles';
 import setSortType from '../../../../store/actions/setSortType';
+import incDecSort from '../../../../store/actions/incDecSort';
+
 
 const typesOfSort = [{
   name: 'По умолчанию',
@@ -23,12 +28,13 @@ const typesOfSort = [{
 {
   name: 'Имени',
   value: 'title',
-}
+},
+];
 
-]
 const Sort = () => {
-  const { sort } = useSelector((state) => state.products);
+  const { sort, incDec } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+
   return (
     <ListControls>
       <ListControlsTitle>
@@ -49,9 +55,22 @@ const Sort = () => {
             </option>
           ))}
         </Select>
+        {incDec === 'ASC' ? (
+          <Icon
+            icon={angleDoubleUp}
+            style={{ paddingLeft: '5px' }}
+            onClick={() => dispatch(incDecSort('DESC'))}
+          />
+        ) : (
+          <Icon
+            icon={angleDoubleDown}
+            style={{ paddingLeft: '5px' }}
+            onClick={() => dispatch(incDecSort('ASC'))}
+          />
+        )}
       </ControlsMainText>
     </ListControls>
   );
-}
+};
 
 export default Sort;
