@@ -10,7 +10,7 @@ import setSortType from '../../../../store/actions/setSortType';
 
 const typesOfSort = [{
   name: 'По умолчанию',
-  value: 'default',
+  value: 'created_at',
 },
 {
   name: 'Автору',
@@ -22,7 +22,7 @@ const typesOfSort = [{
 },
 {
   name: 'Имени',
-  value: 'name',
+  value: 'title',
 }
 
 ]

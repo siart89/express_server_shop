@@ -11,11 +11,11 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState(false);
   const dispatch = useDispatch();
-  const { pageNum, maxOnPage } = useSelector((state) => state.products);
+  const { pageNum, maxOnPage, sort } = useSelector((state) => state.products);
 
   useEffect(() => {
     const fetchProductList = async () => {
-      const resp = await fetch(`/products/all?pagenum=${pageNum}&limit=${maxOnPage}`);
+      const resp = await fetch(`/products/all?pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}`);
       if (resp.ok) {
         const result = await resp.json();
         setProducts(result.product);
@@ -25,7 +25,7 @@ const ProductList = () => {
       }
     };
     fetchProductList();
-  }, [dispatch, maxOnPage, pageNum]);
+  }, [dispatch, maxOnPage, pageNum, sort]);
   return (
     <BooksWrapper>
       <ProductListTop />

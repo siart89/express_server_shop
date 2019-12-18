@@ -9,9 +9,14 @@ export default (app) => {
   app.get('/products/all', async (req, res) => {
     try {
       const offset = calcOffset(req.query.pagenum, req.query.limit);
+      const values = {
+        limit: req.query.limit,
+        offset,
+        sort: req.query.sort,
+      }
       const product = await db.any(`SELECT * FROM books 
-        ORDER BY created_at DESC
-        LIMIT $1 OFFSET $2`, [+req.query.limit, offset]);
+        ORDER BY $[sort:name] DESC
+        LIMIT $[limit] OFFSET $[offset]`, values);
       const { count } = await db.one('SELECT count(*) FROM books');
       const data = {
         product,

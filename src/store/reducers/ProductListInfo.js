@@ -1,7 +1,7 @@
 export default (state = {
   maxOnPage: 16,
   pageNum: 1,
-  sort: 'default'
+  sort: 'created_at'
 }, action) => {
   switch (action.type) {
   case 'SET_LENGTH':
