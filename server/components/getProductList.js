@@ -27,12 +27,13 @@ export default (app) => {
         findId = checkId.map((item) => item.id);
       }
       const where = pgp.as.format('WHERE id IN ($1:csv)', [findId]);
+
       const product = await db.any(`SELECT * FROM books 
         ${findId && where}
         ORDER BY $[sort:name] ${values.inc_dec}
         LIMIT $[limit] OFFSET $[offset]`, values);
 
-      const { count } = await db.one('SELECT count(*) FROM books');
+      const { count } = await db.one(`SELECT count(*) FROM books ${findId && where}`);
       // this two for experimet with quick search
       const titles = await db.any('SELECT DISTINCT (title) FROM books');
       const authors = await db.any('SELECT DISTINCT (author) FROM books');
