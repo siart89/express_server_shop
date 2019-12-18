@@ -17,7 +17,7 @@ const Count = () => {
   const [endNum, setEndNum] = useState(1);
   useEffect(() => {
     // calc start count number
-    const start = Math.max((maxOnPage * (pageNum - 1)), 1);
+    const start = Math.max((maxOnPage * (pageNum - 1) + 1), 1);
     setStartNum(start);
   }, [maxOnPage, pageNum]);
 

@@ -106,11 +106,12 @@ const InputCheckBox = styled.div`
     content:"";
     display:block;
     position:absolute;
-    left:1.5px;
-    top:1.5px;
+    left:50%;
+    top:50%;
     width:10px;
     height:10px;
     background-color:#42CEE2;
+    transform: translate(-50%, -50%);
   }
 `;
 
