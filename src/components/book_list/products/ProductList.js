@@ -27,10 +27,10 @@ const ProductList = () => {
         setProducts(result.product);
         if (result.product) {
           // if result has matches
-          dispatch(setInfoOfProd(result.product.length, result.count, result.headers));
+          dispatch(setInfoOfProd(result.product.length, result.count));
         } else {
           // if result is empty
-          dispatch(setInfoOfProd(0, 0, result.headers));
+          dispatch(setInfoOfProd(0, 0));
         }
       } else {
         setMessage(true);
