@@ -10,7 +10,7 @@ const SearchField = () => {
   const dispatch = useDispatch();
   const inpRef = useRef();
   // blur effect for inpField
-  document.body.addEventListener('click', (e) => {
+  document.body.addEventListener('mousedown', (e) => {
     if (!e.target.dataset.search) {
       inpRef.current.blur();
       setIsFocus(false);
