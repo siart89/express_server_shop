@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ListWrapper from './bookListStyles';
 import ListFilter from './listFilter/ListFilter';
 import ProductList from './products/ProductList';
 import setAllTitles from '../../store/actions/setAllTitles';
+import setMaxPrice from '../../store/actions/setMaxPrice';
 
 const BookList = () => {
   const dispatch = useDispatch();
-
+  const { headers } = useSelector((state) => state.products);
+  // geting all titles and authors of products for tips
   useEffect(() => {
     const allTitles = [];
     const getHeaders = async () => {
@@ -19,8 +21,22 @@ const BookList = () => {
         dispatch(setAllTitles(allTitles));
       }
     };
-    getHeaders();
+    if (!headers) {
+      getHeaders();
+    }
+  }, [dispatch, headers]);
+
+  useEffect(() => {
+    const fetchMaxPrice = async () => {
+      const resp = await fetch('/product/max/price');
+      if (resp.ok) {
+        const result = await resp.json();
+        dispatch(setMaxPrice(result.price));
+      }
+    };
+    fetchMaxPrice();
   }, [dispatch]);
+
   return (
     <ListWrapper>
       <ListFilter />

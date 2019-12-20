@@ -22,9 +22,26 @@ const ProductList = () => {
   } = useSelector((state) => state.products);
 
   useEffect(() => {
+    const info = {
+      pageNum,
+      limit: maxOnPage,
+      sort,
+      incDec,
+      cost: {
+        min: priceFilter.min,
+        max: priceFilter.max,
+      },
+      category,
+    };
     const fetchProductList = async () => {
-      const url = `/products/all?q=${search}&pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}&inc_dec=${incDec}&cost=${priceFilter}&category=${category}`;
-      const resp = await fetch(url);
+      // const url = `/products/all?q=${search}&pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}&inc_dec=${incDec}&cost=${priceFilter}&category=${category}`;
+      const resp = await fetch(`/products/all?q=${search}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(info),
+      });
       if (resp.ok) {
         const result = await resp.json();
         setProducts(result.product);

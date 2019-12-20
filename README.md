@@ -68,6 +68,8 @@
   |rating         | real
 
   |category       | text
+
+  sale            | boolean DEFAULT false
   
 ]
 

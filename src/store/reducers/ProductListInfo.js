@@ -8,6 +8,7 @@ export default (state = {
   priceFilter: {
     min: null,
     max: null,
+    sale: false,
   },
 }, action) => {
   switch (action.type) {
@@ -38,8 +39,11 @@ export default (state = {
       priceFilter: {
         min: action.payload.min,
         max: action.payload.max,
+        sale: action.payload.sale,
       },
     };
+  case 'SET_MAX_PRICE':
+    return { ...state, maxPrice: action.payload };
   default:
     return state;
   }

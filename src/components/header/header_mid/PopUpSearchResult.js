@@ -22,12 +22,12 @@ const PopUpSearchResult = ({ text, isFocus, setValue }) => {
   }, [text, headers, isFocus]);
   // show or hide tips
   useEffect(() => {
-    if (match && isFocus) {
+    if (match && isFocus && text) {
       setShowTip(true);
     } else {
       setShowTip(false);
     }
-  }, [match, isFocus]);
+  }, [match, isFocus, text]);
 
   return (
     <PopUpDiv isFocus={isFocus}>

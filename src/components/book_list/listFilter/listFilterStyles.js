@@ -104,7 +104,7 @@ const InputCheckBox = styled.div`
 
   &::before{
     content:"";
-    display:block;
+    display:${(props) => (props.isSale ? 'block' : 'none')};
     position:absolute;
     left:50%;
     top:50%;

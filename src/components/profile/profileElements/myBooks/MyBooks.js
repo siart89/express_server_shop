@@ -98,7 +98,11 @@ const MyBooks = () => {
       }
     }
   };
-
+  const checkValueIsNum = (e) => {
+    if (!Number.isNaN(+e.target.value)) {
+      setPrice(e.target.value);
+    }
+  };
   return (
     <>
       <MyBooksWrapper>
@@ -152,7 +156,7 @@ const MyBooks = () => {
             type="text"
             name="price"
             placeholder="Цена"
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={checkValueIsNum}
             value={price}
             required
           />

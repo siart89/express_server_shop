@@ -1,13 +1,15 @@
+import bodyParser from 'body-parser';
 import pgp from 'pg-promise';
 import db from './db';
 
+const jsonParser = bodyParser.json();
 
 const calcOffset = (off, max) => {
   if (+off > 1) return (off - 1) * max;
   return 0;
 };
 
-const searchingId = (req, res, next) => {
+const searchingId = async (req, res, next) => {
   if (req.query.q) {
     db.task(async (t) => {
       const lookingForId = await t.any(`SELECT id FROM books 
@@ -32,44 +34,63 @@ const searchingId = (req, res, next) => {
       });
   } else next();
 };
-
+// Filters => by Category, Cost, Sale
 const makeProductFilter = (category, cost) => {
   let filterQuery = 'books';
+
   if (category) {
-    filterQuery = pgp.as.format('(SELECT * FROM books WHERE to_tsvector(category) @@ plainto_tsquery($1))', [category])
+    filterQuery = pgp.as.format(`
+     (SELECT * FROM books
+      WHERE to_tsvector(category)
+      @@ plainto_tsquery($1)) AS filter `,
+    [category]);
   }
-  if (cost) {
-    filterQuery = pgp.as.format('(SELECT * FROM books WHERE price IN ($1:csv))', [cost])
+  if (cost.min && cost.max) {
+    filterQuery = pgp.as.format(`
+    (SELECT * FROM books
+      WHERE price BETWEEN ($1::float8::numeric::money) 
+      AND ($2::float8::numeric::money)) AS filter `,
+    [cost.min, cost.max]);
   }
-  if (cost && category) {
-    filterQuery = pgp.as.format('(SELECT * FROM books WHERE to_tsvector(category) @@ plainto_tsquery($1) AND price IN ($2:csv))', [category, cost])
+  if (category && (cost.min && cost.max)) {
+    filterQuery = pgp.as.format(`
+    (SELECT * FROM books WHERE
+    to_tsvector(category) @@ plainto_tsquery($1)
+    AND (price BETWEEN ($2::float8::numeric::money) 
+    AND ($3::float8::numeric::money))) AS filter `,
+    [category, cost.min, cost.max]);
   }
   return filterQuery;
-}
+};
 
 const getsResult = async (req, res, next) => {
-  const offset = calcOffset(req.query.pagenum, req.query.limit);
+  const offset = calcOffset(req.body.pageNum, req.body.limit);
   const values = {
-    limit: req.query.limit,
+    limit: req.body.limit,
     offset,
-    sort: req.query.sort,
-    inc_dec: req.query.inc_dec,
-    search: req.query.q,
-    category: req.query.category,
+    sort: req.body.sort,
+    incDec: req.body.incDec,
+    search: req.body.question,
+    category: req.body.category,
+    cost: req.body.cost,
   };
 
   try {
-    console.log(makeProductFilter(req.query.category));
     const where = pgp.as.format('WHERE id IN ($1:csv)', [req.searchId]);
 
-    const product = await db.any(`SELECT * FROM ${makeProductFilter(req.query.category)} 
-      ${req.searchId && where}
-      ORDER BY $[sort:name] ${values.inc_dec}
-      LIMIT $[limit] OFFSET $[offset]`, values);
+    const isSearchingText = () => {
+      if (req.searchId) return where;
+      return '';
+    };
+
+    const product = await db.any(`SELECT * FROM ${makeProductFilter(values.category, values.cost)} 
+      ${isSearchingText()}
+      ORDER BY $[sort:name] ${values.incDec}
+      LIMIT $[limit] OFFSET $[offset] `, values);
 
     const { count } = await db.one(`SELECT count(*) FROM 
-    ${makeProductFilter(req.query.category)}
-     ${req.searchId && where}`);
+    ${makeProductFilter(values.category, values.cost)}
+     ${isSearchingText()}`);
     const data = {
       product,
       count,
@@ -78,7 +99,8 @@ const getsResult = async (req, res, next) => {
     req.data = data;
     next();
   } catch (e) {
-    console.log(e);
+    // eslint-disable-next-line no-console
+    console.log(e.message);
   }
 };
 
@@ -88,6 +110,7 @@ export default (app) => {
       // this two for experimet with quick search
       const titles = await db.any('SELECT DISTINCT (title) FROM books');
       const authors = await db.any('SELECT DISTINCT (author) FROM books');
+
       const headers = [...titles.map((item) => item.title), ...authors.map((item) => item.author)];
 
       res.status(200).json(headers);
@@ -96,8 +119,19 @@ export default (app) => {
     }
   });
 
-  app.use('/products/all', searchingId, getsResult, (req, res) => {
-    if (req.query.q && !req.searchId) {
+  app.get('/product/max/price', async (req, res) => {
+    try {
+      const data = await db.one(`
+      SELECT price::money::numeric::float8 FROM books
+       WHERE price = (SELECT max(price) FROM books )`);
+      res.status(200).json(data);
+    } catch (e) {
+      res.sendStatus(500);
+    }
+  });
+
+  app.post('/products/all', jsonParser, searchingId, getsResult, (req, res) => {
+    if (req.body.question && !req.searchId) {
       res.status(200).json([]);
     } else {
       res.status(200).json(req.data);

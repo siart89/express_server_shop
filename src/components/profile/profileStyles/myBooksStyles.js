@@ -88,6 +88,10 @@ const SubmitButton = styled.button`
   font-weight: bold;
   color: #fff;
   background-color: #42cee2;
+  &:active{
+    box-shadow: none;
+    transform:translateY(2px);
+  }
 `;
 
 // ** BOOKLIST STYLES
