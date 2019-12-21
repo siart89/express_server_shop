@@ -25,6 +25,7 @@ const SearchField = () => {
     dispatch(setSearchText(searchValue));
   };
   const handleSetInpValue = (val) => {
+    inpRef.current.focus();
     setSearchValue(val);
   };
 

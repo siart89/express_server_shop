@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  Redirect,
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   ProfileWrapper,
@@ -16,7 +21,6 @@ import setUrl from '../../store/actions/setUrl';
 import toLocalStorage from '../../store/actions/toLocalStorage';
 import ProfileBoard from '../profile/mainBoard/ProfileBoard';
 import logOut from '../../store/actions/logOut';
-
 
 const MainProfile = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -72,9 +76,12 @@ const MainProfile = () => {
             </LinksWrapper>
             <ProfContent>
               <Switch>
-                <Route path="/profile/mybooks" component={MyBooks} />
-                <Route path="/profile/favorites" component={Favorites} />
-                <Route path="/" component={ProfileBoard} />
+                <Route path="/profile/mybooks" exact component={MyBooks} />
+                <Route path="/profile/favorites" exact component={Favorites} />
+                <Route path="/profile/" exact component={ProfileBoard} />
+                <Route>
+                  <Redirect to="/profile" />
+                </Route>
               </Switch>
             </ProfContent>
           </ProfContentWrapper>
