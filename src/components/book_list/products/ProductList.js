@@ -19,6 +19,7 @@ const ProductList = () => {
     search,
     priceFilter,
     category,
+    sale,
   } = useSelector((state) => state.products);
 
   useEffect(() => {
@@ -31,10 +32,10 @@ const ProductList = () => {
         min: priceFilter.min,
         max: priceFilter.max,
       },
+      sale,
       category,
     };
     const fetchProductList = async () => {
-      // const url = `/products/all?q=${search}&pagenum=${pageNum}&limit=${maxOnPage}&sort=${sort}&inc_dec=${incDec}&cost=${priceFilter}&category=${category}`;
       const resp = await fetch(`/products/all?q=${search}`, {
         method: 'POST',
         headers: {
@@ -57,7 +58,17 @@ const ProductList = () => {
       }
     };
     fetchProductList();
-  }, [dispatch, maxOnPage, pageNum, sort, incDec, search, priceFilter, category]);
+  }, [
+    dispatch,
+    maxOnPage,
+    pageNum,
+    sort,
+    incDec,
+    search,
+    priceFilter,
+    category,
+    sale,
+  ]);
 
   const prodList = (products ? (products.map((item) => (
     <Link
@@ -84,10 +95,7 @@ const ProductList = () => {
         ) : (
           prodList
         )}
-
       </ProdGridBox>
-
-
     </BooksWrapper>
   );
 };

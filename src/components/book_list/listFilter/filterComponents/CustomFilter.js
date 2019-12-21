@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import setFilterPrice from './../../../../store/actions/setFilterPrice';
+import { close } from 'react-icons-kit/fa/close';
+import setFilterPrice from '../../../../store/actions/setFilterPrice';
 import {
   CustomFilterForm,
   FilterTitle,
@@ -10,15 +11,17 @@ import {
   PriceInput,
   CheckBoxLabel,
   InputCheckBox,
+  ResetBtn,
 } from '../listFilterStyles';
 import { SubmitButton } from '../../../profile/profileStyles/myBooksStyles';
+import { CloseIcon } from '../../../popUp/styles/styles';
+import setSaleFilter from '../../../../store/actions/setSaleFilter';
 
 const CustomFilter = () => {
   const dispatch = useDispatch();
   const [maxValue, setMaxValue] = useState('');
   const [minValue, setMinValue] = useState('');
-  const [isSale, setIsSale] = useState(false);
-  const { maxPrice } = useSelector((state) => state.products);
+  const { maxPrice, sale } = useSelector((state) => state.products);
 
   const handleConfirmFilter = (e) => {
     e.preventDefault();
@@ -26,13 +29,18 @@ const CustomFilter = () => {
     const priceCheck = [(+minValue || 0), (+maxValue || +maxPrice)].sort((a, b) => a > b);
     setMinValue(priceCheck[0]);
     setMaxValue(priceCheck[1]);
-    dispatch(setFilterPrice(priceCheck[0], priceCheck[1], isSale));
+    dispatch(setFilterPrice(priceCheck[0], priceCheck[1]));
   };
 
   const checkValueIsNum = (val, cb) => {
     if (!Number.isNaN(+val)) {
       cb(val);
     }
+  };
+  const handleResetFilter = () => {
+    setMinValue('');
+    setMaxValue('');
+    dispatch(setFilterPrice(null, null));
   };
 
   return (
@@ -57,21 +65,31 @@ const CustomFilter = () => {
         </InputBox>
         <InputBox style={{ marginTop: '15px' }}>
           <CheckBoxLabel htmlFor="sale">
-            <InputCheckBox isSale={isSale} />
+            <InputCheckBox isSale={sale} />
             <input
               type="checkbox"
               id="sale"
-              onChange={(e) => setIsSale(e.target.checked)}
-              checked={isSale}
+              onChange={(e) => {
+                dispatch(setSaleFilter(e.target.checked));
+              }}
+              checked={sale}
             />
             Товары со скидкой
           </CheckBoxLabel>
         </InputBox>
       </PriceFilter>
-      {(minValue || maxValue || isSale) && (
-        <SubmitButton type="submit" style={{ margin: '14px 20px 0 5px' }}>
-          Показать
-        </SubmitButton>
+      {(minValue || maxValue) && (
+        <>
+          <SubmitButton type="submit" style={{ margin: '14px 20px 0 5px' }}>
+            Показать
+          </SubmitButton>
+          <ResetBtn
+            type="button"
+            onClick={handleResetFilter}
+          >
+            <CloseIcon icon={close} size={20} />
+          </ResetBtn>
+        </>
       )}
 
     </CustomFilterForm>

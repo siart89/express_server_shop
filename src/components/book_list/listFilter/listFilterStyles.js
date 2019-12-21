@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { CloseBtn } from '../../popUp/styles/styles';
 
 const FilterWrapper = styled.div`
   width:100%;
@@ -47,6 +48,7 @@ const Label = styled.label`
 const CustomFilterForm = styled.form`
   display:flex;
   flex-direction:column;
+  position:relative;
 `;
 const PriceFilter = styled.div`
   display:flex;
@@ -114,7 +116,11 @@ const InputCheckBox = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-
+const ResetBtn = styled(CloseBtn)`
+  position:absolute;
+  top: 71px;
+  right: -20px;
+`;
 export {
   FilterWrapper,
   FilterForm,
@@ -127,4 +133,5 @@ export {
   PriceInput,
   CheckBoxLabel,
   InputCheckBox,
+  ResetBtn,
 };

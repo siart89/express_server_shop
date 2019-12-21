@@ -35,7 +35,7 @@ const searchingId = async (req, res, next) => {
   } else next();
 };
 // Filters => by Category, Cost, Sale
-const makeProductFilter = (category, cost) => {
+const makeProductFilter = ({ category, cost }) => {
   let filterQuery = 'books';
 
   if (category) {
@@ -73,24 +73,28 @@ const getsResult = async (req, res, next) => {
     search: req.body.question,
     category: req.body.category,
     cost: req.body.cost,
+    sale: req.body.sale,
   };
 
   try {
-    const where = pgp.as.format('WHERE id IN ($1:csv)', [req.searchId]);
+    const where = pgp.as.format('AND id IN ($1:csv)', [req.searchId]);
 
     const isSearchingText = () => {
       if (req.searchId) return where;
       return '';
     };
 
-    const product = await db.any(`SELECT * FROM ${makeProductFilter(values.category, values.cost)} 
+    const product = await db.any(`SELECT * FROM ${makeProductFilter(values)} 
+      WHERE sale = $[sale]
       ${isSearchingText()}
       ORDER BY $[sort:name] ${values.incDec}
       LIMIT $[limit] OFFSET $[offset] `, values);
 
+    // calculation count of all products with all filters
     const { count } = await db.one(`SELECT count(*) FROM 
-    ${makeProductFilter(values.category, values.cost)}
-     ${isSearchingText()}`);
+    ${makeProductFilter(values)}
+      WHERE sale = $[sale]
+     ${isSearchingText()}`, values);
     const data = {
       product,
       count,
