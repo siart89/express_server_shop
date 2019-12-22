@@ -6,7 +6,7 @@ export default (app) => {
       const data = await db.one('SELECT * FROM books WHERE id = $1', [req.params.id]);
       res.status(200).json(data);
     } catch (e) {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   });
 };

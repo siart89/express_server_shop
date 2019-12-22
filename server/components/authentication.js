@@ -16,20 +16,20 @@ const makeNewSession = async (req, next, name, id) => {
     ip: req.ip,
     os: req.useragent.os,
   },
-    secretKey,
-    { algorithm: 'HS256', expiresIn: '72h' }, (err, token) => {
-      req.refreshToken = token;
-    });
+  secretKey,
+  { algorithm: 'HS256', expiresIn: '72h' }, (err, token) => {
+    req.refreshToken = token;
+  });
   try {
-    db.task(async t => {
-        // clear user session , expect 1 user session for each
+    db.task(async (t) => {
+    // clear user session , expect 1 user session for each
       await t.none('DELETE FROM sessions WHERE user_id = $1', [id]);
-       // Create user session
+      // Create user session
       await t.none(`INSERT INTO sessions (user_id, ip, os, user_agent,
          refresh_token, expired_at, created_at, name)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [id, req.ip, req.useragent.os, req.useragent.source,
-          req.refreshToken, expiredTime, new Date(createdTime), name]);
+      [id, req.ip, req.useragent.os, req.useragent.source,
+        req.refreshToken, expiredTime, new Date(createdTime), name]);
     })
       .then(() => {
         const token = jwt.sign({
@@ -37,8 +37,8 @@ const makeNewSession = async (req, next, name, id) => {
           ip: req.ip,
           os: req.useragent.os,
         },
-          secretKey,
-          { algorithm: 'HS256', expiresIn: '1s' })
+        secretKey,
+        { algorithm: 'HS256', expiresIn: '1s' });
 
         req.userInfo = {
           token,
@@ -47,18 +47,18 @@ const makeNewSession = async (req, next, name, id) => {
           id,
         };
         next();
-      })
+      });
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 };
 
 const authenticationUser = async (req, res, next) => {
   try {
     const data = await db.one('SELECT * FROM users WHERE mail = $1 AND password = $2', [req.body.mail, req.body.password]);
-    makeNewSession(req, next, data.name, data.id)
+    makeNewSession(req, next, data.name, data.id);
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.sendStatus(403);
   }
 };
