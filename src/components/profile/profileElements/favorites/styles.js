@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FavorIconBox } from '../header/headerStyles';
+import { FavorIconBox } from '../../../header/headerStyles';
 
 const FavoritesWrapper = styled.div`
   grid-column: 1 / 3;

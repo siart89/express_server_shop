@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FavoritesWrapper } from './styles';
 import ElemOfFavorites from './ElemOfFavorites';
-import { Title } from '../profile/profileStyles/styles';
+import { Title } from '../../profileStyles/styles';
 
 const Favorites = () => {
   const [favor, setFavorites] = useState([]);
@@ -12,7 +12,6 @@ const Favorites = () => {
     const fetchData = async () => {
       const resp = await fetch(`/profile/user/${id}/favorites`);
       if (resp.ok) {
-
         const result = await resp.json();
         setFavorites(result);
       }

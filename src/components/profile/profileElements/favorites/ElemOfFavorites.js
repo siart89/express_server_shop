@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FavoriteCover, FavoriteGridBox } from './styles';
-import { Title, LogOutButton } from '../profile/profileStyles/styles';
+import { Title, LogOutButton } from '../../profileStyles/styles';
 
 const ElemOfFavorites = ({
   title,

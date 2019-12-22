@@ -16,7 +16,7 @@ import {
 } from '../profile/profileStyles/styles';
 import ProfileInfo from '../profile/profileElements/ProfileInfo';
 import MyBooks from '../profile/profileElements/myBooks/MyBooks';
-import Favorites from '../favorites/Favorites';
+import Favorites from '../profile/profileElements/favorites/Favorites';
 import setUrl from '../../store/actions/setUrl';
 import toLocalStorage from '../../store/actions/toLocalStorage';
 import ProfileBoard from '../profile/mainBoard/ProfileBoard';
