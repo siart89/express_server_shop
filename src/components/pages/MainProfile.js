@@ -27,6 +27,7 @@ const MainProfile = () => {
   const dispatch = useDispatch();
   const isBooks = useRouteMatch('/profile/mybooks');
   const isFavor = useRouteMatch('/profile/favorites');
+  const match = useRouteMatch();
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -78,9 +79,9 @@ const MainProfile = () => {
               <Switch>
                 <Route path="/profile/mybooks" exact component={MyBooks} />
                 <Route path="/profile/favorites" exact component={Favorites} />
-                <Route path="/profile/" exact component={ProfileBoard} />
+                <Route path={match.path} exact component={ProfileBoard} />
                 <Route>
-                  <Redirect to="/profile" />
+                  <Redirect to="/page404" />
                 </Route>
               </Switch>
             </ProfContent>

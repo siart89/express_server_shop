@@ -36,7 +36,7 @@ function App() {
           </ProtectedRouter>
           <Route path="/book/:id" exact component={MainBookCard} />
           <Route path="/cart" component={Cart} />
-          <Route path="/page404" exact component={Page404} />
+          <Route path="/page404" component={Page404} />
           <Route component={Page404} />
         </Switch>
       </div>
