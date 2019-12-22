@@ -8,7 +8,7 @@ export default (app) => {
       await db.none('DELETE FROM favorites WHERE user_id = $1 AND book_id = $2', [id, bookId]);
       await res.status(200).json({ isFavor: false });
     } catch (e) {
-      console.log(e)
+      console.log(e);
       res.sendStatus(500);
     }
   });
@@ -39,7 +39,7 @@ export default (app) => {
       await db.none('INSERT INTO favorites (book_id, user_id) VALUES ($1, $2);', [req.params.bookId, req.params.userId]);
       res.sendStatus(200);
     } catch (e) {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   });
 

@@ -13,6 +13,7 @@ const checkToken = async (req, res, next) => {
     const refreshToken = req.headers.authorization.split(' ')[2];
     try {
       const encoded = await jwt.verify(token, secretKey, { algorithm: 'HS256' });
+      // eslint-disable-next-line require-atomic-updates
       req.id = encoded.id;
       next();
     } catch (e) {
@@ -29,10 +30,11 @@ const checkToken = async (req, res, next) => {
 
         if (ip === req.ip && os === req.useragent.os) {
           makeNewSession(req, next, name, id);
+          // eslint-disable-next-line require-atomic-updates
           req.id = encod.id;
         }
       } catch (er) {
-        console.log(er)
+        console.log(er);
         res.sendStatus(403);
       }
     }
@@ -53,7 +55,7 @@ const authorization = (app) => {
         res.status(200).json({ avatar });
       }
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   });
 };
