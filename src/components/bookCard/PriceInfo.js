@@ -90,6 +90,7 @@ const PriceInfo = ({
       {match ? (
         <Link
           to="/cart"
+          style={{ textDecoration: 'none' }}
         >
           <PriceBtn
             small={small}
@@ -112,12 +113,13 @@ const PriceInfo = ({
 };
 PriceInfo.defaultProps = {
   small: false,
+  isHover: false,
 };
 PriceInfo.propTypes = {
   price: PropTypes.string.isRequired,
   bookId: PropTypes.number.isRequired,
   small: PropTypes.bool,
-  isHover: PropTypes.bool.isRequired,
+  isHover: PropTypes.bool,
 };
 
 export default PriceInfo;
