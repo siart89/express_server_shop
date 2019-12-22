@@ -3,7 +3,6 @@ import {
   Switch,
   Route,
   useRouteMatch,
-  Redirect,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
@@ -21,6 +20,7 @@ import setUrl from '../../store/actions/setUrl';
 import toLocalStorage from '../../store/actions/toLocalStorage';
 import ProfileBoard from '../profile/mainBoard/ProfileBoard';
 import logOut from '../../store/actions/logOut';
+import Page404 from './Page404';
 
 const MainProfile = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -80,9 +80,7 @@ const MainProfile = () => {
                 <Route path="/profile/mybooks" exact component={MyBooks} />
                 <Route path="/profile/favorites" exact component={Favorites} />
                 <Route path={match.path} exact component={ProfileBoard} />
-                <Route>
-                  <Redirect to="/page404" />
-                </Route>
+                <Route path="*" component={Page404} />
               </Switch>
             </ProfContent>
           </ProfContentWrapper>
