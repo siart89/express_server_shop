@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   ProductCont,
   ProdTitle,
-  ProdPrice,
   ProdAuthor,
   CoverBox,
   ProdCover,
 } from './styles';
+import PriceInfo from '../../../bookCard/PriceInfo';
 
 const Product = ({
   url,
   title,
   price,
   author,
+  id,
 }) => {
   const [isHover, setIsHover] = useState(false);
   return (
@@ -23,17 +25,23 @@ const Product = ({
       onMouseLeave={() => setIsHover(false)}
     >
       <CoverBox hover={isHover}>
-        <ProdCover src={url} />
+        <Link to={`/book/${id}`} style={{ textDecoration: 'none' }}>
+          <ProdCover src={url} />
+        </Link>
       </CoverBox>
-      <ProdTitle>
+
+      <ProdTitle hover={isHover}>
         {title}
       </ProdTitle>
       <ProdAuthor>
         {author}
       </ProdAuthor>
-      <ProdPrice>
-        {price}
-      </ProdPrice>
+      <PriceInfo
+        price={price}
+        bookId={id}
+        small
+        isHover={isHover}
+      />
     </ProductCont>
   );
 };
@@ -43,6 +51,7 @@ Product.propTypes = {
   title: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default Product;

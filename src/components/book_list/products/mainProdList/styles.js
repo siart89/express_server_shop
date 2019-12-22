@@ -42,7 +42,11 @@ const ProdTitle = styled.span`
   font-weight: 500;
   line-height: 1.43;
   color: #181616; 
-  align-self: center;
+  transition: transform 0.15s ease-in;
+  align-self: center; 
+  ${(props) => props.hover && css`
+    transform: translateY(-13px);
+  `};
 `;
 const ProdPrice = styled(PriceText)`
   font-size: 16px;

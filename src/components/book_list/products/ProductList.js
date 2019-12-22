@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooksWrapper, AlarmText } from './productListStyles';
 import ProductListTop from './top/ProductListTop';
@@ -71,18 +70,14 @@ const ProductList = () => {
   ]);
 
   const prodList = (products ? (products.map((item) => (
-    <Link
-      to={`/book/${item.id}`}
+    <Product
       key={item.id}
-      style={{ textDecoration: 'none' }}
-    >
-      <Product
-        title={item.title}
-        price={item.price}
-        url={item.cover}
-        author={item.author}
-      />
-    </Link>
+      title={item.title}
+      price={item.price}
+      url={item.cover}
+      author={item.author}
+      id={+item.id}
+    />
   ))) : (
     <AlarmText>По вашему запросу нет совпадений</AlarmText>
   ));
