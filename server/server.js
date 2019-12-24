@@ -15,8 +15,9 @@ import comments from './components/comments';
 import bookRating from './components/bookRating';
 import newProd from './components/getNewProd';
 import getProductList from './components/getProductList';
+import combine from './bySequelize/combine';
 
-
+combine();
 // create server
 const app = express();
 app.set('trust proxy', true);
