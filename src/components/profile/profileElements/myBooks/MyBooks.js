@@ -54,7 +54,7 @@ const MyBooks = () => {
       author,
       price,
       description,
-      url,
+      cover: url,
       category,
     };
 

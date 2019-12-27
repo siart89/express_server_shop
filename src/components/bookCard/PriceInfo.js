@@ -116,7 +116,7 @@ PriceInfo.defaultProps = {
   isHover: false,
 };
 PriceInfo.propTypes = {
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
   bookId: PropTypes.number.isRequired,
   small: PropTypes.bool,
   isHover: PropTypes.bool,

@@ -31,7 +31,7 @@ const BookList = () => {
       const resp = await fetch('/product/max/price');
       if (resp.ok) {
         const result = await resp.json();
-        dispatch(setMaxPrice(result.price));
+        dispatch(setMaxPrice(result.max));
       }
     };
     fetchMaxPrice();

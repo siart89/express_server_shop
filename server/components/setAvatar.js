@@ -1,13 +1,20 @@
-import db from './db';
 import { checkToken } from './authorization';
+import db from '../../models';
 
+const { User } = db;
 
 const setUrl = async (req, res, next) => {
 // path for local server
   const mypath = `http://localhost:3000/resources/${req.file.filename}`;
-  req.avaterPath = mypath;
+  req.avatarPath = mypath;
   try {
-    await db.none('UPDATE users SET avatar = $1 WHERE id = $2', [mypath, req.id]);
+    await User.update({
+      avatar: mypath,
+    }, {
+      where: {
+        id: req.id,
+      },
+    });
     next();
   } catch (e) {
     res.sendStatus(403);
@@ -20,10 +27,10 @@ export default (app, upload) => {
       res.status(200).json({
         token: req.userInfo.token,
         refreshToken: req.userInfo.refreshToken,
-        url: req.avaterPath,
+        url: req.avatarPath,
       });
     } else {
-      res.status(200).json({ url: req.avaterPath });
+      res.status(200).json({ url: req.avatarPath });
     }
   });
 };

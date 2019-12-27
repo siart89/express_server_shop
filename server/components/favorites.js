@@ -1,11 +1,17 @@
-import db from './db';
+import db from '../../models';
 
+const { Favorite, Book, User } = db;
 
 export default (app) => {
   app.use('/profile/user:id/book:bookId/favorites/remove', async (req, res) => {
     const { id, bookId } = req.params;
     try {
-      await db.none('DELETE FROM favorites WHERE user_id = $1 AND book_id = $2', [id, bookId]);
+      await Favorite.destroy({
+        where: {
+          UserId: id,
+          BookId: bookId,
+        },
+      });
       await res.status(200).json({ isFavor: false });
     } catch (e) {
       console.log(e);
@@ -16,10 +22,15 @@ export default (app) => {
   app.use('/profile/user:id/book:bookId/favorites', async (req, res) => {
     const { id, bookId } = req.params;
     try {
-      await db.one(`SELECT * FROM favorites 
-      INNER JOIN books ON favorites.book_id = books.id
-      WHERE favorites.user_id = $1 AND favorites.book_id=$2;`, [id, bookId]);
-      res.status(200).json({ isFavor: true });
+      const isFavorite = await Favorite.findOne({
+        where: {
+          UserId: id,
+          BookId: bookId,
+        },
+      });
+      if (isFavorite.dataValue) {
+        res.status(200).json({ isFavor: true });
+      }
     } catch (e) {
       res.json({ isFavor: false });
     }
@@ -27,8 +38,14 @@ export default (app) => {
 
   const checkInDb = async (req, res, next) => {
     try {
-      await db.none('SELECT * FROM favorites WHERE book_id = $1 AND user_id = $2;', [req.params.bookId, req.params.userId]);
-      next();
+      const match = await Favorite.findAll({
+        where: {
+          BookId: req.params,
+        },
+      });
+      if (!match.dataValue) {
+        next();
+      }
     } catch (e) {
       res.sendStatus(500);
     }
@@ -36,7 +53,10 @@ export default (app) => {
 
   app.use('/favorites/user:userId/book:bookId', checkInDb, async (req, res) => {
     try {
-      await db.none('INSERT INTO favorites (book_id, user_id) VALUES ($1, $2);', [req.params.bookId, req.params.userId]);
+      await Favorite.create({
+        UserId: req.params.userId,
+        BookId: req.params.bookId,
+      });
       res.sendStatus(200);
     } catch (e) {
       res.sendStatus(500);
@@ -45,9 +65,18 @@ export default (app) => {
 
   app.use('/profile/user/:id/favorites', async (req, res) => {
     try {
-      const data = await db.any(`SELECT * FROM (SELECT * FROM favorites WHERE user_id = $1) AS favor
-      INNER JOIN books ON favor.book_id = books.id;`, [req.params.id]);
-      res.json(data);
+      const data = await Favorite.findAll({
+        include: [{
+          model: Book,
+          include: [{
+            model: User,
+            where: {
+              id: req.params.id,
+            },
+          }],
+        }],
+      });
+      res.json(data.dataValue);
     } catch (err) {
       res.json({});
     }

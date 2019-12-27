@@ -1,10 +1,9 @@
-import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import db from './db';
 import { makeNewSession } from './authentication';
+import db from '../../models';
 
-
-const secretKey = fs.readFileSync('./server/secret/secret.key', 'utf8');
+const { Session, User } = db;
+const secretKey = process.env.SECRET_KEY;
 
 
 const checkToken = async (req, res, next) => {
@@ -25,15 +24,23 @@ const checkToken = async (req, res, next) => {
           name,
           os,
         } = encod;
-        await db.one(`SELECT (user_id, refresh_token) FROM sessions
-        WHERE user_id = $1 AND refresh_token = $2;`, [id, refreshToken]);
-
-        if (ip === req.ip && os === req.useragent.os) {
-          makeNewSession(req, next, name, id);
-          // eslint-disable-next-line require-atomic-updates
-          req.id = encod.id;
+        const session = await Session.findOne({
+          where: {
+            userId: id,
+            refreshToken,
+          },
+        });
+        if (session.dataValues) {
+          if (ip === req.ip && os === req.useragent.os) {
+            makeNewSession(req, next, name, id);
+            // eslint-disable-next-line require-atomic-updates
+            req.id = encod.id;
+          }
+        } else {
+          throw new Error('User has no exist');
         }
       } catch (er) {
+        // eslint-disable-next-line no-console
         console.log(er);
         res.sendStatus(403);
       }
@@ -44,17 +51,24 @@ const checkToken = async (req, res, next) => {
 const authorization = (app) => {
   app.use('/user/verify', checkToken, async (req, res) => {
     try {
-      const { avatar } = await db.one('SELECT avatar FROM users WHERE id = $1', [req.id]);
+      const avatar = await User.findOne({
+        where: {
+          id: req.id,
+        },
+      }, {
+        attributes: ['avatar'],
+      });
       if (req.userInfo) {
         res.status(200).json({
           token: req.userInfo.token,
           refreshToken: req.userInfo.refreshToken,
-          avatar,
+          avatar: avatar.dataValues,
         });
       } else {
-        res.status(200).json({ avatar });
+        res.status(200).json({ avatar: avatar.dataValues });
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.log(e);
     }
   });

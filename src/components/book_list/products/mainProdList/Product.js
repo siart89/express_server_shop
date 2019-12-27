@@ -49,7 +49,7 @@ const Product = ({
 Product.propTypes = {
   url: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
 };

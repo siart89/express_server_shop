@@ -1,13 +1,23 @@
 import bodyParser from 'body-parser';
-import db from './db';
+import db from '../../models';
 
+const { Comment, Book, User } = db;
 const jsonParser = bodyParser.json();
 
 export default (app) => {
   app.get('/book/comment/book/:id', async (req, res) => {
     try {
-      const data = await db.any('SELECT * FROM comments WHERE book_id = $1 ORDER BY created_at DESC', [req.params.id]);
-      res.status(200).json(data);
+      const data = await Comment.findAll({
+        where: {
+          id: req.params.id,
+        },
+        raw: true,
+      }, {
+        order: [['createdAt', 'DESC']],
+      });
+      if (data) {
+        res.status(200).json(data);
+      }
     } catch (e) {
       res.sendStatus(500);
     }
@@ -17,10 +27,14 @@ export default (app) => {
   // ADD Comment to DB
 
   app.use('/book/comment', jsonParser, async (req, res, next) => {
-    req.bookId = req.body.bookId;
+    const comment = {
+      bookId: req.body.bookId,
+      text: req.body.text,
+      authorName: req.body.author,
+      rating: req.body.rating,
+    };
     try {
-      await db.none('INSERT INTO comments (book_id, text, author_name, rating) VALUES ($1, $2, $3, $4);',
-        [req.body.bookId, req.body.text, req.body.author, req.body.rating]);
+      await Comment.create(comment);
       next();
     } catch (e) {
       res.sendStatus(500);
@@ -28,30 +42,43 @@ export default (app) => {
       console.log(e);
     }
   });
-  // Set that new comment was read
+  // Set that the new comment was read
   app.use('/profile/notifications/check/book:bookId', async (req, res) => {
     const { bookId } = req.params;
     try {
-      await db.none(`UPDATE comments SET is_read = true
-       WHERE book_id = $1;`, [bookId]);
+      db.Comment.update({
+        isRead: true,
+      }, {
+        where: {
+          BookId: bookId,
+        },
+      });
       res.sendStatus(200);
     } catch (e) {
       console.log(e);
     }
   });
 
-  // Geting a comments wich have status is_read = false
+  // Geting comments wich have a status is_read = false
   app.use('/profile/notifications/user:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const data = await db.any(`SELECT id, title, count(*) FROM 
-      (SELECT book_id AS id, title, text FROM comments
-      INNER JOIN books ON
-      books.id = comments.book_id
-      WHERE books.user_id = $1 AND comments.is_read = false) AS note
-      GROUP BY id, title
-      ;`, [id]);
-      res.status(200).json(data);
+      const data = await Comment.findAll({
+        include: [{
+          model: Book,
+          include: [{
+            model: User,
+            where: {
+              id,
+            },
+          }],
+        }],
+      }, {
+        attributes: ['id', 'title', db.sequelize.fn('COUNT', db.sequelize.col('*')), 'count'],
+      });
+      if (data.dataValue) {
+        res.status(200).json(data);
+      }
     } catch (e) {
       console.log(e);
       res.sendStatus(500);

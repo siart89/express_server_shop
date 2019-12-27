@@ -15,9 +15,7 @@ import comments from './components/comments';
 import bookRating from './components/bookRating';
 import newProd from './components/getNewProd';
 import getProductList from './components/getProductList';
-import combine from './bySequelize/combine';
 
-combine();
 // create server
 const app = express();
 app.set('trust proxy', true);
@@ -30,7 +28,7 @@ app.listen(port, (err) => {
     console.log('Server has not been started, error : ', err);
   } else {
     // eslint-disable-next-line no-console
-    console.log('Server has been started');
+    console.log('Server have been started');
   }
 });
 
@@ -59,10 +57,10 @@ registration(app);
 authentication(app);
 // **AUTHORIZATION--------------------
 authorization(app);
-// Get products list
-getProductList(app);
 // Add Avatar picture
 setAvatar(app, upload);
+// Get products list
+getProductList(app);
 // ADD USERS BOOK TO DB
 addBook(app, upload);
 // ** GET USER BOOKLIST
@@ -77,3 +75,5 @@ newProd(app);
 comments(app);
 // Book rating !!! must be Last module
 bookRating(app);
+
+app.use(express.static(path.join(__dirname, 'public')));

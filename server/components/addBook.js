@@ -1,16 +1,14 @@
 import bodyParser from 'body-parser';
-import db from './db';
 import { checkToken } from './authorization';
+import db from '../../models';
 
+const { Book } = db;
 const jsonParser = bodyParser.json();
 // path for local server
 const setBooksInfo = async (req, res, next) => {
   try {
-    await db.none(`INSERT INTO books (user_id, title, author, description, cover, price, category)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-    [req.id, req.body.title, req.body.author,
-      req.body.description, req.body.url, req.body.price, req.body.category]);
-    await next();
+    await Book.create({ ...req.body, UserId: req.id });
+    next();
   } catch (e) {
     res.sendStatus(500);
   }

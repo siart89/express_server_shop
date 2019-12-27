@@ -1,7 +1,7 @@
 export default (state = {
   maxOnPage: 16,
   pageNum: 1,
-  sort: 'created_at',
+  sort: 'createdAt',
   incDec: 'ASC',
   search: '',
   category: '',
